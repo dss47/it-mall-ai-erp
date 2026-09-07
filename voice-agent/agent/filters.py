@@ -91,7 +91,8 @@ _PURE_THANKS_RE = re.compile(
 
 _REG_CLOSING_TOKENS = (
     "merci beaucoup|merci bien|merci de tout|merci encore|"
-    "non merci|non c'est tout|non c est tout|non rien d'autre|non rien d autre|"
+    "non merci|non c'est tout|non c est tout|non rien d'autre|non rien d autre|non|nan|"
+    "c'est bon|c est bon|ok|d'accord|daccord|"
     "au revoir|aurevoir|bonne journ\\w*|bonne soir\\w*|bonne nuit|bonne continuation|"
     "à bient\\w*|a bient\\w*|"
     "c'est tout|c est tout|ce sera tout|ça sera tout|ca sera tout|"

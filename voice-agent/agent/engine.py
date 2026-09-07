@@ -13,7 +13,7 @@ def _capture_meta(state, reply, fallback_text=None):
     """Récolte nom, motif + analyse produits par le LLM pour les sauver en base."""
     analysis = reply.get("analysis") or {}
     motif = (reply.get("motif") or "").strip()
-    if motif:
+    if motif and not state.get("motif"):
         state["motif"] = llm._clean_motif(motif)[:300]
     elif fallback_text and not state.get("motif"):
         cleaned = llm._clean_motif(fallback_text)
