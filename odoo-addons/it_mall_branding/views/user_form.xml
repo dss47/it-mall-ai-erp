@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_password" model="ir.ui.view">
+        <field name="name">res.users.form.password</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <page name="account_security" position="inside">
+                <group string="Password">
+                    <button name="%(it_mall_branding.action_it_mall_password_wizard)d"
+                            type="action" string="Set Password"
+                            class="btn-secondary"
+                            context="{'default_user_id': id}"/>
+                </group>
+            </page>
+        </field>
+    </record>
+</odoo>

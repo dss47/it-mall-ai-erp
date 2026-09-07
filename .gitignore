@@ -1,0 +1,25 @@
+# Environment & Secrets
+*.env
+db.env
+.env
+
+# Logs & Temporary files
+*.log
+*.tmp
+__pycache__/
+*.pyc
+
+# Audio & Media
+*.wav
+*.mp3
+recordings/
+records/
+sessions/
+.caller_id/
+
+# System & IDE
+.vscode/
+.idea/
+.DS_Store
+*.bak
+*.backup*

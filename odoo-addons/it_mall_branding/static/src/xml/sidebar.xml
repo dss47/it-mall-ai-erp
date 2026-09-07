@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="it_mall_branding.Sidebar">
+        <div class="o_itmall_sidebar d-flex flex-column" t-att-class="{'collapsed': state.collapsed}">
+            <div class="o_sidebar_header" t-on-click="() => this.toggle()">
+                <span class="o_sidebar_brand">IT Mall</span>
+                <span class="o_sidebar_brand_small">IT</span>
+            </div>
+
+            <nav class="o_sidebar_nav flex-grow-1">
+                <t t-foreach="getNavItems()" t-as="nav" t-key="nav.key">
+                    <div class="o_sidebar_group">
+                        <button t-on-click="() => nav.home ? this.navigateHome() : (nav.items ? this.toggleNav(nav.key) : this.navTo(nav.action))"
+                                class="o_sidebar_link"
+                                t-att-class="{'o_sidebar_link_has_children': nav.items}"
+                                t-att-title="nav.label">
+                            <i t-att-class="'fa ' + nav.icon + ' o_sidebar_icon'"/>
+                            <span class="o_sidebar_label" t-esc="nav.label"/>
+                            <i t-if="nav.items"
+                               t-att-class="'fa fa-chevron-down o_sidebar_chevron ' + (isExpanded(nav.key) ? 'o_sidebar_chevron_open' : '')"/>
+                        </button>
+                        <div t-if="nav.items and isExpanded(nav.key)" class="o_sidebar_submenu">
+                            <t t-foreach="getSubItems(nav)" t-as="item" t-key="item_index">
+                                <div t-if="item.header" class="o_sidebar_subheader" t-esc="item.header"/>
+                                <button t-else=""
+                                        t-on-click="() => this.onSubItemClick(item)"
+                                        class="o_sidebar_sublink" t-esc="item.label"/>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </nav>
+
+            <div class="o_sidebar_menu_actions">
+                <button t-foreach="menuItems" t-as="item" t-key="item.id"
+                        class="o_sidebar_menu_btn" t-on-click="() => this.onMenuItemClick(item)"
+                        t-att-title="getItemTitle(item)">
+                    <i t-att-class="'fa ' + getItemIcon(item)"/>
+                </button>
+            </div>
+            <div class="o_sidebar_user d-flex align-items-center">
+                <img t-att-src="'/web/image?model=res.partner&amp;id=' + user.partnerId + '&amp;field=avatar_128&amp;unique=' + user.writeDate"
+                     class="o_sidebar_avatar rounded-circle" alt="Avatar"/>
+                <div class="o_sidebar_user_info ms-2">
+                    <div class="o_sidebar_user_name" t-esc="user.name"/>
+                    <div class="o_sidebar_user_company small text-muted" t-esc="session.company_name || ''"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

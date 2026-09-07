@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_it_mall_password_wizard,it_mall.password.wizard,model_it_mall_password_wizard,base.group_system,1,1,1,1
+access_it_mall_call_log,it_mall.call.log,model_it_mall_call_log,base.group_user,1,1,1,1

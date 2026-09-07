@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inject Google Font Globally into HTML Head -->
+    <template id="custom_web_layout" inherit_id="web.layout">
+        <xpath expr="//title" position="replace">
+            <title>IT Mall — Operations Suite</title>
+        </xpath>
+        <xpath expr="//link[@rel='shortcut icon']" position="replace">
+            <link rel="shortcut icon" href="/it_mall_branding/static/src/img/favicon.ico"
+                type="image/x-icon" />
+        </xpath>
+        <xpath expr="//head" position="inside">
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+                rel="stylesheet" />
+            <script type="text/javascript">
+                try {
+                    if (localStorage.getItem("it_mall_dark_mode") === "dark") {
+                        document.documentElement.setAttribute("data-bs-theme", "dark");
+                        document.documentElement.classList.add("o_dark_mode");
+                    }
+                } catch (e) {}
+            </script>
+        </xpath>
+    </template>
+
+    <!-- Debrand Offline Page -->
+    <template id="custom_webclient_offline" inherit_id="web.webclient_offline">
+        <xpath expr="//style" position="inside">
+            .card img {
+                width: 96px;
+                filter: none;
+            }
+            .card button {
+                background-color: #1B3A5C;
+                border: 1px solid #1B3A5C;
+            }
+            .card button:hover {
+                background-color: #16314e;
+                border: 1px solid #16314e;
+            }
+        </xpath>
+        <xpath expr="//div[hasclass('card')]/img" position="replace">
+            <img src="/it_mall_branding/static/src/img/logo.png" alt="IT Mall"
+                style="max-height: 96px; filter: none;" />
+        </xpath>
+        <xpath expr="//p" position="replace">
+            <p>Check your network connection and come back here. IT Mall will load as soon as you're back online.</p>
+        </xpath>
+    </template>
+
+    <!-- Custom Login Page Branding -->
+    <template id="custom_login_layout" inherit_id="web.login_layout">
+        <xpath expr="//div[hasclass('text-center') and .//img]" position="replace">
+            <div class="text-center mb-4">
+                <img src="/it_mall_branding/static/src/img/logo.png" alt="IT Mall"
+                    style="max-height: 80px;" />
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('text-center') and hasclass('small')]" position="replace">
+            <div class="text-center small text-muted mt-3">
+                IT Mall Suite · Enterprise Build
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Hide Apps Menu from non-admin -->
+    <record id="base.menu_management" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+
+    <!-- OWL Welcome Action -->
+    <record id="action_it_mall_welcome" model="ir.actions.client">
+        <field name="name">Welcome</field>
+        <field name="tag">it_mall_welcome_action</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Top-Level Home Menu -->
+    <menuitem id="menu_it_mall_welcome_root"
+        name="Home"
+        action="action_it_mall_welcome"
+        sequence="1" />
+
+    <!-- Restrict default app menus to admin only (custom nav coming later) -->
+    <record id="mail.menu_root_discuss" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+    <record id="crm.crm_menu_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+    <record id="sale.sale_menu_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+    <record id="stock.menu_stock_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+    <record id="account.menu_finance" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+    <record id="calendar.mail_menu_calendar" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+    </record>
+
+    <!-- User Action Assignment -->
+    <record id="base.user_admin" model="res.users">
+        <field name="action_id" ref="action_it_mall_welcome" />
+    </record>
+
+
+</odoo>

@@ -1,0 +1,8 @@
+sessions/
+piper/
+__pycache__/
+*.pyc
+.env
+*.old
+*.bak
+db.env

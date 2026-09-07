@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_call_button" model="ir.ui.view">
+        <field name="name">res.partner.form.call.button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_call_partner" string="📞 Appeler ce contact" type="object" class="btn-primary" invisible="not phone and not mobile"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+</odoo>

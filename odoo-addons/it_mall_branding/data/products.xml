@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="category_telephonie" model="product.category">
+        <field name="name">Téléphonie IP</field>
+    </record>
+    <record id="category_reseau" model="product.category">
+        <field name="name">Réseau</field>
+    </record>
+    <record id="category_securite" model="product.category">
+        <field name="name">Sécurité</field>
+    </record>
+
+
+    <record id="prod_001" model="product.template">
+        <field name="name">Grandstream GXP1625 IP Phone</field>
+        <field name="default_code">TEL-001</field>
+        <field name="list_price">1200</field>
+        <field name="standard_price">800</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.8</field>
+        <field name="barcode">6941001001001</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_002" model="product.template">
+        <field name="name">Yealink T23G IP Phone</field>
+        <field name="default_code">TEL-002</field>
+        <field name="list_price">1500</field>
+        <field name="standard_price">1000</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.9</field>
+        <field name="barcode">6941001001002</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_003" model="product.template">
+        <field name="name">Cisco SPA112 IP Phone</field>
+        <field name="default_code">TEL-003</field>
+        <field name="list_price">1800</field>
+        <field name="standard_price">1200</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.0</field>
+        <field name="barcode">6941001001003</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_004" model="product.template">
+        <field name="name">Yealink T46U IP Phone</field>
+        <field name="default_code">TEL-004</field>
+        <field name="list_price">2200</field>
+        <field name="standard_price">1500</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.1</field>
+        <field name="barcode">6941001001004</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_005" model="product.template">
+        <field name="name">Grandstream GXP2170 IP Phone</field>
+        <field name="default_code">TEL-005</field>
+        <field name="list_price">2800</field>
+        <field name="standard_price">1900</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.2</field>
+        <field name="barcode">6941001001005</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_006" model="product.template">
+        <field name="name">Jabra Pro 930 Headset</field>
+        <field name="default_code">TEL-006</field>
+        <field name="list_price">1800</field>
+        <field name="standard_price">1200</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.2</field>
+        <field name="barcode">6941001001006</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_007" model="product.template">
+        <field name="name">Plantronics Blackwire 3320 Headset</field>
+        <field name="default_code">TEL-007</field>
+        <field name="list_price">900</field>
+        <field name="standard_price">600</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.15</field>
+        <field name="barcode">6941001001007</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_008" model="product.template">
+        <field name="name">Jabra Engage 75 Headset</field>
+        <field name="default_code">TEL-008</field>
+        <field name="list_price">3200</field>
+        <field name="standard_price">2200</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.3</field>
+        <field name="barcode">6941001001008</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_009" model="product.template">
+        <field name="name">Grandstream UCM6202 IPBX</field>
+        <field name="default_code">TEL-009</field>
+        <field name="list_price">4500</field>
+        <field name="standard_price">3000</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.5</field>
+        <field name="barcode">6941001001009</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_010" model="product.template">
+        <field name="name">Grandstream UCM6204 IPBX</field>
+        <field name="default_code">TEL-010</field>
+        <field name="list_price">7000</field>
+        <field name="standard_price">5000</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.0</field>
+        <field name="barcode">6941001001010</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_011" model="product.template">
+        <field name="name">Yeastone T40G IPBX</field>
+        <field name="default_code">TEL-011</field>
+        <field name="list_price">5500</field>
+        <field name="standard_price">3800</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.5</field>
+        <field name="barcode">6941001001011</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+
+    <record id="prod_012" model="product.template">
+        <field name="name">GoIP4 GSM Gateway</field>
+        <field name="default_code">TEL-012</field>
+        <field name="list_price">3500</field>
+        <field name="standard_price">2500</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.8</field>
+        <field name="barcode">6941001001012</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_013" model="product.template">
+        <field name="name">GoIP8 GSM Gateway</field>
+        <field name="default_code">TEL-013</field>
+        <field name="list_price">6000</field>
+        <field name="standard_price">4200</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.2</field>
+        <field name="barcode">6941001001013</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_014" model="product.template">
+        <field name="name">GoIP16 GSM Gateway</field>
+        <field name="default_code">TEL-014</field>
+        <field name="list_price">9500</field>
+        <field name="standard_price">6800</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.0</field>
+        <field name="barcode">6941001001014</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_015" model="product.template">
+        <field name="name">Grandstream HT814 FXS Gateway</field>
+        <field name="default_code">TEL-015</field>
+        <field name="list_price">1200</field>
+        <field name="standard_price">800</field>
+        <field name="categ_id" ref="category_telephonie" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941001001015</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+
+    <record id="prod_016" model="product.template">
+        <field name="name">TP-Link TL-SG1008P PoE Switch 8 ports</field>
+        <field name="default_code">RES-001</field>
+        <field name="list_price">800</field>
+        <field name="standard_price">500</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941002001001</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_017" model="product.template">
+        <field name="name">TP-Link TL-SG1016PE PoE Switch 16 ports</field>
+        <field name="default_code">RES-002</field>
+        <field name="list_price">2200</field>
+        <field name="standard_price">1500</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.8</field>
+        <field name="barcode">6941002001002</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_018" model="product.template">
+        <field name="name">Cisco SG110-24 Switch 24 ports</field>
+        <field name="default_code">RES-003</field>
+        <field name="list_price">3000</field>
+        <field name="standard_price">2000</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">3.0</field>
+        <field name="barcode">6941002001003</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_019" model="product.template">
+        <field name="name">HP 1920-48G Switch 48 ports</field>
+        <field name="default_code">RES-004</field>
+        <field name="list_price">8500</field>
+        <field name="standard_price">6000</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">5.5</field>
+        <field name="barcode">6941002001004</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_020" model="product.template">
+        <field name="name">TP-Link TL-SG2428P PoE Switch 28 ports</field>
+        <field name="default_code">RES-005</field>
+        <field name="list_price">5000</field>
+        <field name="standard_price">3500</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">4.0</field>
+        <field name="barcode">6941002001005</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_021" model="product.template">
+        <field name="name">MikroTik CSS326-24G Switch</field>
+        <field name="default_code">RES-006</field>
+        <field name="list_price">1800</field>
+        <field name="standard_price">1200</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.5</field>
+        <field name="barcode">6941002001006</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_022" model="product.template">
+        <field name="name">MikroTik RB750Gr3 Router</field>
+        <field name="default_code">RES-007</field>
+        <field name="list_price">900</field>
+        <field name="standard_price">600</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.3</field>
+        <field name="barcode">6941002001007</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_023" model="product.template">
+        <field name="name">MikroTik RB4011iGS+ Router</field>
+        <field name="default_code">RES-008</field>
+        <field name="list_price">3500</field>
+        <field name="standard_price">2400</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.5</field>
+        <field name="barcode">6941002001008</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_024" model="product.template">
+        <field name="name">MikroTik hEX S Router</field>
+        <field name="default_code">RES-009</field>
+        <field name="list_price">700</field>
+        <field name="standard_price">450</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.4</field>
+        <field name="barcode">6941002001009</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+
+    <record id="prod_025" model="product.template">
+        <field name="name">Ubiquiti UniFi AP AC Lite</field>
+        <field name="default_code">RES-010</field>
+        <field name="list_price">1100</field>
+        <field name="standard_price">750</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.3</field>
+        <field name="barcode">6941002001010</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_026" model="product.template">
+        <field name="name">Ubiquiti UniFi AP AC Pro</field>
+        <field name="default_code">RES-011</field>
+        <field name="list_price">2000</field>
+        <field name="standard_price">1400</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.4</field>
+        <field name="barcode">6941002001011</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_027" model="product.template">
+        <field name="name">TP-Link EAP245 WiFi AP</field>
+        <field name="default_code">RES-012</field>
+        <field name="list_price">1400</field>
+        <field name="standard_price">950</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941002001012</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_028" model="product.template">
+        <field name="name">Ubiquiti UniFi AP 6 Lite</field>
+        <field name="default_code">RES-013</field>
+        <field name="list_price">1600</field>
+        <field name="standard_price">1100</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.3</field>
+        <field name="barcode">6941002001013</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_029" model="product.template">
+        <field name="name">Patch Panel 24 ports</field>
+        <field name="default_code">RES-014</field>
+        <field name="list_price">400</field>
+        <field name="standard_price">250</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.0</field>
+        <field name="barcode">6941002001014</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_030" model="product.template">
+        <field name="name">Network Rack 19" 12U</field>
+        <field name="default_code">RES-015</field>
+        <field name="list_price">2000</field>
+        <field name="standard_price">1300</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">15.0</field>
+        <field name="barcode">6941002001015</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_031" model="product.template">
+        <field name="name">RJ45 Cable Cat6 305m</field>
+        <field name="default_code">RES-016</field>
+        <field name="list_price">600</field>
+        <field name="standard_price">350</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">8.0</field>
+        <field name="barcode">6941002001016</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_032" model="product.template">
+        <field name="name">RJ45 Crimping Tool</field>
+        <field name="default_code">RES-017</field>
+        <field name="list_price">250</field>
+        <field name="standard_price">150</field>
+        <field name="categ_id" ref="category_reseau" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941002001017</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+
+    <record id="prod_033" model="product.template">
+        <field name="name">Fortinet FortiGate 40F Firewall</field>
+        <field name="default_code">SEC-001</field>
+        <field name="list_price">4000</field>
+        <field name="standard_price">2800</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.0</field>
+        <field name="barcode">6941003001001</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_034" model="product.template">
+        <field name="name">Fortinet FortiGate 60F Firewall</field>
+        <field name="default_code">SEC-002</field>
+        <field name="list_price">7500</field>
+        <field name="standard_price">5200</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.8</field>
+        <field name="barcode">6941003001002</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_035" model="product.template">
+        <field name="name">MikroTik RB4011iGS+RM Firewall</field>
+        <field name="default_code">SEC-003</field>
+        <field name="list_price">3800</field>
+        <field name="standard_price">2600</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.5</field>
+        <field name="barcode">6941003001003</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_036" model="product.template">
+        <field name="name">Cisco Meraki MX64 Firewall</field>
+        <field name="default_code">SEC-004</field>
+        <field name="list_price">8000</field>
+        <field name="standard_price">5600</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">3.0</field>
+        <field name="barcode">6941003001004</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_037" model="product.template">
+        <field name="name">Hikvision DS-2CD2047G2-L IP Camera</field>
+        <field name="default_code">SEC-005</field>
+        <field name="list_price">1500</field>
+        <field name="standard_price">1000</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.4</field>
+        <field name="barcode">6941003001005</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_038" model="product.template">
+        <field name="name">Hikvision DS-2CD2T47G2-LS IP Camera</field>
+        <field name="default_code">SEC-006</field>
+        <field name="list_price">2200</field>
+        <field name="standard_price">1500</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941003001006</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_039" model="product.template">
+        <field name="name">Dahua IPC-HDW3849HP-AS-PV IP Camera</field>
+        <field name="default_code">SEC-007</field>
+        <field name="list_price">1800</field>
+        <field name="standard_price">1200</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.4</field>
+        <field name="barcode">6941003001007</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_040" model="product.template">
+        <field name="name">Ubiquiti UniFi G4 Bullet IP Camera</field>
+        <field name="default_code">SEC-008</field>
+        <field name="list_price">2500</field>
+        <field name="standard_price">1700</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.5</field>
+        <field name="barcode">6941003001008</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_041" model="product.template">
+        <field name="name">Hikvision DS-2DE4425IW-DE PTZ Camera</field>
+        <field name="default_code">SEC-009</field>
+        <field name="list_price">6000</field>
+        <field name="standard_price">4200</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.5</field>
+        <field name="barcode">6941003001009</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_042" model="product.template">
+        <field name="name">Dahua IPC-HFW5442T-ASE Bullet Camera</field>
+        <field name="default_code">SEC-010</field>
+        <field name="list_price">1400</field>
+        <field name="standard_price">950</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.3</field>
+        <field name="barcode">6941003001010</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_043" model="product.template">
+        <field name="name">Hikvision DS-2CD2347G2-LU Turret Camera</field>
+        <field name="default_code">SEC-011</field>
+        <field name="list_price">2000</field>
+        <field name="standard_price">1400</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.4</field>
+        <field name="barcode">6941003001011</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_044" model="product.template">
+        <field name="name">Hikvision DS-7608NI-K2/8P NVR 8ch</field>
+        <field name="default_code">SEC-012</field>
+        <field name="list_price">3500</field>
+        <field name="standard_price">2400</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.0</field>
+        <field name="barcode">6941003001012</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_045" model="product.template">
+        <field name="name">Dahua NVR4108HS-8P-4KS2 NVR 8ch</field>
+        <field name="default_code">SEC-013</field>
+        <field name="list_price">3000</field>
+        <field name="standard_price">2000</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.5</field>
+        <field name="barcode">6941003001013</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_046" model="product.template">
+        <field name="name">Ubiquiti UniFi NVR</field>
+        <field name="default_code">SEC-014</field>
+        <field name="list_price">4500</field>
+        <field name="standard_price">3100</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.5</field>
+        <field name="barcode">6941003001014</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_047" model="product.template">
+        <field name="name">Hikvision DS-7716NI-K4 NVR 16ch</field>
+        <field name="default_code">SEC-015</field>
+        <field name="list_price">5500</field>
+        <field name="standard_price">3800</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">3.0</field>
+        <field name="barcode">6941003001015</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_048" model="product.template">
+        <field name="name">Dahua NVR4116HS-8P-4KS2 NVR 16ch</field>
+        <field name="default_code">SEC-016</field>
+        <field name="list_price">4000</field>
+        <field name="standard_price">2800</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">2.5</field>
+        <field name="barcode">6941003001016</field>
+        <field name="is_storable" eval="True" />
+    </record>
+
+    <record id="prod_049" model="product.template">
+        <field name="name">Seagate SkyHawk 4TB Surveillance HDD</field>
+        <field name="default_code">SEC-017</field>
+        <field name="list_price">1200</field>
+        <field name="standard_price">800</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">0.7</field>
+        <field name="barcode">6941003001017</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    <record id="prod_050" model="product.template">
+        <field name="name">Seagate SkyHawk 8TB Surveillance HDD</field>
+        <field name="default_code">SEC-018</field>
+        <field name="list_price">2400</field>
+        <field name="standard_price">1700</field>
+        <field name="categ_id" ref="category_securite" />
+        <field name="type">consu</field>
+        <field name="taxes_id" eval="[(6, 0, [ref('account.1_sale_tax_template')])]" />
+        <field name="weight">1.0</field>
+        <field name="barcode">6941003001018</field>
+        <field name="is_storable" eval="True" />
+    </record>
+    </data>
+</odoo>

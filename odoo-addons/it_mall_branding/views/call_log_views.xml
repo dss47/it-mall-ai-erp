@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Search View -->
+    <record id="view_it_mall_call_log_search" model="ir.ui.view">
+        <field name="name">it_mall.call.log.search</field>
+        <field name="model">it_mall.call.log</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher des appels">
+                <field name="caller_name"/>
+                <field name="caller_phone"/>
+                <field name="motif"/>
+                <separator/>
+                <filter string="👤 Mes Appels" name="filter_my_calls" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="🔴 Urgent" name="filter_urgent" domain="[('state', '=', 'urgent')]"/>
+                <filter string="🟡 À rappeler" name="filter_to_call" domain="[('state', '=', 'to_call')]"/>
+                <filter string="🟢 Traités" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <group expand="0" string="Grouper par">
+                    <filter string="Assigné à" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Statut" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'call_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- List (Tree) View -->
+    <record id="view_it_mall_call_log_tree" model="ir.ui.view">
+        <field name="name">it_mall.call.log.list</field>
+        <field name="model">it_mall.call.log</field>
+        <field name="arch" type="xml">
+            <list string="Journal d'appels" decoration-danger="state == 'urgent'" decoration-warning="state == 'to_call'" decoration-success="state == 'done'">
+                <field name="call_date" string="Date &amp; Heure"/>
+                <field name="caller_name" string="Nom du client"/>
+                <field name="caller_phone" string="Téléphone" widget="phone"/>
+                <field name="motif" string="Motif de l'appel"/>
+                <field name="assigned_user_ids" string="Équipe Assignée" widget="many2many_tags"/>
+                <field name="state" widget="badge" decoration-danger="state == 'urgent'" decoration-warning="state == 'to_call'" decoration-success="state == 'done'" string="Statut"/>
+                <button name="action_call_back" string="Rappeler" type="object" icon="fa-phone" class="btn-sm btn-primary"/>
+                <button name="action_mark_done" string="Marquer Traité" type="object" icon="fa-check" invisible="state == 'done'" class="btn-sm btn-outline-success"/>
+                <button name="action_mark_urgent" string="Urgent" type="object" icon="fa-bolt" invisible="state == 'urgent'" class="btn-sm btn-outline-danger"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_it_mall_call_log_kanban" model="ir.ui.view">
+        <field name="name">it_mall.call.log.kanban</field>
+        <field name="model">it_mall.call.log</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false">
+                <field name="id"/>
+                <field name="caller_name"/>
+                <field name="caller_phone"/>
+                <field name="motif"/>
+                <field name="call_date"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-3 d-flex flex-column justify-content-between h-100">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong class="fs-6" t-esc="record.caller_name.value"/>
+                                    <span t-if="record.state.raw_value == 'urgent'" class="badge bg-danger">🔴 Urgent</span>
+                                    <span t-if="record.state.raw_value == 'to_call'" class="badge bg-warning text-dark">🟡 À rappeler</span>
+                                    <span t-if="record.state.raw_value == 'done'" class="badge bg-success">🟢 Traité</span>
+                                </div>
+                                <div class="text-primary mb-2">
+                                    <i class="fa fa-phone me-1" title="Téléphone"/> <span t-esc="record.caller_phone.value"/>
+                                </div>
+                                <p class="text-muted small mb-2" t-esc="record.motif.value"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
+                                <small class="text-muted" t-esc="record.call_date.value"/>
+                                <div class="d-flex gap-1">
+                                    <button name="action_call_back" type="object" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-phone" title="Rappeler"/>
+                                    </button>
+                                    <button t-if="record.state.raw_value != 'done'" name="action_mark_done" type="object" class="btn btn-sm btn-outline-success">
+                                        <i class="fa fa-check" title="Valider"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_it_mall_call_log_form" model="ir.ui.view">
+        <field name="name">it_mall.call.log.form</field>
+        <field name="model">it_mall.call.log</field>
+        <field name="arch" type="xml">
+            <form string="Fiche d'appel">
+                <header>
+                    <button name="action_call_back" string="📞 Rappeler ce client" type="object" class="btn-primary"/>
+                    <button name="action_create_partner" string="👤 Créer Contact" type="object" class="btn-success" invisible="partner_id != False"/>
+                    <button name="action_mark_urgent" string="🔴 Passer en Urgent" type="object" class="btn-danger" invisible="state == 'urgent'"/>
+                    <button name="action_mark_done" string="Marquer comme Traité" type="object" class="btn-secondary" invisible="state == 'done'"/>
+                    <button name="action_mark_to_call" string="Remettre à rappeler" type="object" class="btn-secondary" invisible="state == 'to_call'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="urgent,to_call,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_partner" type="object" class="oe_stat_button" icon="fa-user" invisible="not partner_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Fiche Contact</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="caller_name" string="Nom de l'appelant"/>
+                        <h1>
+                            <field name="caller_name" placeholder="ex: Karim Bennani"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="caller_phone" widget="phone" string="Numéro de téléphone"/>
+                            <field name="partner_id" string="Contact lié"/>
+                        </group>
+                        <group>
+                            <field name="call_date" string="Date &amp; Heure de l'appel"/>
+                        </group>
+                    </group>
+                    <group string="Détails de la demande">
+                        <field name="motif" placeholder="Décrivez la demande du client ou le besoin exprimé lors de l'appel..."/>
+                        <field name="notes" placeholder="Notes internes pour le rappel..."/>
+                    </group>
+                    <group string="Enregistrement de la conversation">
+                        <field name="audio_player" widget="html" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_it_mall_call_log" model="ir.actions.act_window">
+        <field name="name">Appels</field>
+        <field name="res_model">it_mall.call.log</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_it_mall_call_log_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun appel en attente !
+            </p>
+            <p>
+                Les appels reçus par l'agent IA apparaîtront ici automatiquement avec le motif et le numéro du client.
+            </p>
+        </field>
+    </record>
+
+    <!-- URL Action for FreePBX -->
+    <record id="action_open_it_mall_pbx" model="ir.actions.act_url">
+        <field name="name">IT Mall PBX</field>
+        <field name="url">http://localhost</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

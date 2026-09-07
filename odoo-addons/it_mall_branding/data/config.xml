@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="it_mall_branding.web_app_name_config" model="ir.config_parameter">
+        <field name="key">web.web_app_name</field>
+        <field name="value">IT Mall</field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+import socket, time
+s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(("127.0.0.1", 8300))
+s.listen(1)
+c, _ = s.accept()
+hdr = c.recv(19)
+print("header:", hdr.hex(), flush=True)
+print("uuid:", hdr[3:19].hex(), flush=True)
+time.sleep(2)
+c.close()

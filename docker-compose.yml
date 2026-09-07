@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # 🏢 Base de données ERP & Catalogue
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo_secure_password
+    volumes:
+      - odoo_db_data:/var/lib/postgresql/data
+    restart: always
+
+  # 🏢 ERP Odoo 18 avec module IT Mall
+  odoo:
+    image: odoo:18.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./odoo-addons:/mnt/extra-addons
+      - odoo_web_data:/var/lib/odoo
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo_secure_password
+    restart: always
+
+  # 📞 Téléphonie VoIP Asterisk / FreePBX
+  freepbx:
+    image: mleem97/lnxr-freepbx:17
+    network_mode: host
+    restart: always
+
+  # ⚡ Moteur d'automatisation n8n
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: always
+
+  # 🎙️ Agent Vocal IA & Microservice WhatsApp/PDF
+  voice-agent:
+    build: ./voice-agent
+    network_mode: host
+    env_file:
+      - ./voice-agent/db.env
+    depends_on:
+      - db
+      - odoo
+      - n8n
+    restart: always
+
+volumes:
+  odoo_db_data:
+  odoo_web_data:
+  n8n_data:

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- This removes "Powered by Odoo" from footers everywhere -->
+    <template id="brand_promotion_message" inherit_id="web.brand_promotion_message">
+        <xpath expr="." position="replace">
+            <t t-set="final_message">Powered by IT Mall</t>
+            <t t-out="final_message"/>
+        </xpath>
+    </template>
+
+    <!-- This changes the browser theme color from purple to cyan -->
+    <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap">
+        <xpath expr="//meta[@name='theme-color']" position="attributes">
+            <attribute name="content">#00e5ff</attribute>
+        </xpath>
+    </template>
+
+</odoo>

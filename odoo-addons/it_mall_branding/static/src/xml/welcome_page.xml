@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="it_mall_branding.WelcomePage" owl="1">
+        <div class="o_itmall_welcome h-100 overflow-auto py-5" style="background: #f4f7fc;">
+            <div class="container" style="max-width: 960px;">
+                <div class="mb-4">
+                    <h1 class="fw-bold mb-1" style="font-size: 1.75rem; color: #1a1a2e;">
+                        Bienvenue, <t t-esc="userName"/>
+                    </h1>
+                    <p class="text-muted mb-0" style="font-size: 0.95rem;">
+                        Voici votre aperçu du jour.
+                    </p>
+                </div>
+
+                <div t-if="state.loading" class="text-center py-5">
+                    <i class="fa fa-spinner fa-spin fa-3x text-primary"/>
+                </div>
+
+                <t t-if="!state.loading">
+
+                    <!-- Appels / Téléphonie -->
+                    <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+                        <i class="fa fa-phone" style="color: #0284c7;"/>
+                        <h6 class="text-uppercase text-muted small fw-semibold mb-0">Standard &amp; Appels IA</h6>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                <div class="card-body text-center py-4">
+                                    <i class="fa fa-phone-square fa-lg mb-2" style="color: #0284c7;"/>
+                                    <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.pendingCalls || 0"/>
+                                    <div class="text-muted small">Appels à traiter</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                <div class="card-body text-center py-4">
+                                    <i class="fa fa-bolt fa-lg mb-2" style="color: #ef4444;"/>
+                                    <div class="fs-2 fw-bold" style="color: #ef4444;" t-esc="state.stats.urgentCalls || 0"/>
+                                    <div class="text-muted small">Appels Urgents</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap mb-5">
+                        <button class="btn btn-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('it_mall_branding.action_it_mall_call_log')">
+                            <i class="fa fa-list me-1"/> Journal des appels
+                        </button>
+                        <button class="btn btn-outline-danger" style="border-radius: 8px;" t-on-click="() => this.openAction('it_mall_branding.action_it_mall_call_log', { search_default_filter_urgent: 1 })">
+                            <i class="fa fa-bolt me-1"/> Appels Urgents
+                        </button>
+                        <button class="btn btn-outline-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('it_mall_branding.action_open_it_mall_pbx')">
+                            <i class="fa fa-server me-1"/> Console PBX
+                        </button>
+                    </div>
+
+                    <!-- Sales -->
+                    <t t-if="groups.isSales">
+                        <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+                            <i class="fa fa-shopping-cart" style="color: #2563eb;"/>
+                            <h6 class="text-uppercase text-muted small fw-semibold mb-0">Commercial</h6>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-file-text-o fa-lg mb-2" style="color: #2563eb;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.draftQuotations"/>
+                                        <div class="text-muted small">Devis (brouillon)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-check-circle-o fa-lg mb-2" style="color: #16a34a;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.confirmedOrders"/>
+                                        <div class="text-muted small">Commandes confirmées</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-address-card fa-lg mb-2" style="color: #8b5cf6;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.opportunities"/>
+                                        <div class="text-muted small">Opportunités</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap mb-5">
+                            <button class="btn btn-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('sale.action_quotations')">
+                                <i class="fa fa-plus me-1"/> Nouveau Devis
+                            </button>
+                            <button class="btn btn-outline-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('crm.crm_lead_action_pipeline')">
+                                <i class="fa fa-address-card me-1"/> Pipeline
+                            </button>
+                            <button class="btn btn-outline-secondary" style="border-radius: 8px;" t-on-click="() => this.openAction('sale.action_orders')">
+                                <i class="fa fa-list me-1"/> Commandes
+                            </button>
+                        </div>
+                    </t>
+
+                    <!-- Inventory -->
+                    <t t-if="groups.isStock">
+                        <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+                            <i class="fa fa-cubes" style="color: #2563eb;"/>
+                            <h6 class="text-uppercase text-muted small fw-semibold mb-0">Stock</h6>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-arrow-down fa-lg mb-2" style="color: #2563eb;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.incomingPickings"/>
+                                        <div class="text-muted small">Réceptions en cours</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-arrow-up fa-lg mb-2" style="color: #dc2626;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.outgoingPickings"/>
+                                        <div class="text-muted small">Livraisons en cours</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-exclamation-triangle fa-lg mb-2" style="color: #f59e0b;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.lowStock"/>
+                                        <div class="text-muted small">Produits (&lt;10 en stock)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap mb-5">
+                            <button class="btn btn-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('stock.action_picking_tree_incoming')">
+                                <i class="fa fa-plus me-1"/> Nouvelle Réception
+                            </button>
+                            <button class="btn btn-outline-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('stock.action_picking_tree_outgoing')">
+                                <i class="fa fa-truck me-1"/> Livraisons
+                            </button>
+                            <button class="btn btn-outline-secondary" style="border-radius: 8px;" t-on-click="() => this.openAction('stock.action_picking_tree_all')">
+                                <i class="fa fa-list me-1"/> Transferts
+                            </button>
+                        </div>
+                    </t>
+
+                    <!-- Accounting -->
+                    <t t-if="groups.isAccount">
+                        <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+                            <i class="fa fa-book" style="color: #2563eb;"/>
+                            <h6 class="text-uppercase text-muted small fw-semibold mb-0">Comptabilité</h6>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-6">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-pencil-square-o fa-lg mb-2" style="color: #f59e0b;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.draftInvoices"/>
+                                        <div class="text-muted small">Factures en brouillon</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+                                    <div class="card-body text-center py-4">
+                                        <i class="fa fa-check-circle-o fa-lg mb-2" style="color: #16a34a;"/>
+                                        <div class="fs-2 fw-bold" style="color: #1a1a2e;" t-esc="state.stats.postedInvoices"/>
+                                        <div class="text-muted small">Factures validées</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap mb-5">
+                            <button class="btn btn-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('account.action_move_out_invoice_type')">
+                                <i class="fa fa-plus me-1"/> Nouvelle Facture
+                            </button>
+                            <button class="btn btn-outline-primary" style="border-radius: 8px;" t-on-click="() => this.openAction('account.action_account_payments')">
+                                <i class="fa fa-credit-card me-1"/> Paiements
+                            </button>
+                        </div>
+                    </t>
+
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

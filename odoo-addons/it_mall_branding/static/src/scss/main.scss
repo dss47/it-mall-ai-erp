@@ -1,0 +1,2648 @@
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+    display: none !important;
+}
+* {
+    scrollbar-width: none !important;
+}
+
+/* ============================================================
+   IT Mall — Debranding
+   ============================================================ */
+/* Hide Home/Apps Menu Toggle Icon, Text, and Dropdown */
+.o_home_menu_toggle,
+.o_menu_toggle,
+.o_main_navbar .o_menu_brand,
+button[title="Home Menu"],
+button[aria-label="Home Menu"],
+.o_nav_entry.o_home_menu_toggle_item {
+    display: none !important;
+}
+
+/* User Menu Debranding — Keep Preferences (settings) & Log out (logout) only */
+[data-menu="documentation"],
+[data-menu="support"],
+[data-menu="shortcuts"],
+[data-menu="account"],
+[data-menu="install_pwa"],
+.o-overlay-container .dropdown-item:has(.form-switch),
+.o-overlay-container .dropdown-item:has(input[type="checkbox"]) {
+    display: none !important;
+}
+
+/* Hide Footer Branding */
+.o_footer_copyright, 
+.o_sub_menu_footer { 
+    display: none !important; 
+}
+
+/* Hide Messaging & Activities systray (replaced by user dropdown items) */
+.o_menu_systray .o-mail-DiscussSystray-class,
+.o_menu_systray button:has(i.fa-clock-o) {
+    display: none !important;
+}
+
+/* Hide top navbar entirely — sidebar replaces it */
+.o_main_navbar {
+    display: none !important;
+}
+/* Ensure action manager & content stretch to full width */
+.o_action_manager {
+    margin-top: 0 !important;
+    top: 0 !important;
+    width: auto !important;
+    flex: 1 1 100% !important;
+}
+
+.o_content {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+}
+
+/* Hide breadcrumb path (e.g. Sales / Orders / Quotations) but keep the
+   record name and the Actions (More) menu, which contains Delete */
+.o_breadcrumb ol.breadcrumb {
+    display: none !important;
+}
+
+/* Hide all view switcher buttons except Kanban and List/Tree (and Form) */
+.o_cp_switch_buttons {
+    .o_switch_view:not(.o_kanban):not(.o_list):not(.o_form),
+    .dropdown-item:not(:has(.oi-view-kanban)):not(:has(.oi-view-list)):not(:has(.oi-view-form)) {
+        display: none !important;
+    }
+}
+
+/* Hide Chatter across all Form views */
+.o_ChatterContainer,
+.o-mail-Chatter,
+.o_Chatter,
+.oe_chatter {
+    display: none !important;
+}
+
+/* Allow form view & sheet to expand full width on wide screens / zoom out */
+.o_form_view {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+
+    .o_form_renderer {
+        max-width: 100% !important;
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .o_form_view_container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    .o_form_sheet_bg {
+        max-width: 100% !important;
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        margin: 0 !important;
+
+        > .o_form_sheet {
+            max-width: 100% !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            margin: 0 !important;
+        }
+    }
+
+    .o_form_sheet {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    &.o_xxl_form_view {
+        flex-flow: column nowrap !important;
+
+        .o_form_renderer {
+            flex-direction: column !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .o_form_view_container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .o_form_sheet_bg {
+            flex: 1 1 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+}
+
+
+
+
+/* ============================================================
+   IT Mall — Sidebar
+   ============================================================ */
+.o_itmall_sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 240px;
+    height: 100vh;
+    z-index: 1000;
+    background: #fff;
+    color: #333;
+    border-right: 1px solid #e0e0e0;
+    transition: width 0.2s ease;
+    overflow: hidden;
+
+    &.collapsed {
+        width: 60px;
+
+        .o_sidebar_brand { display: none; }
+        .o_sidebar_brand_small {
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding-left: 0;
+        }
+
+        .o_sidebar_header {
+            justify-content: center;
+            padding: 16px 0;
+        }
+
+        .o_sidebar_label,
+        .o_sidebar_menu_actions {
+            display: none !important;
+        }
+
+        .o_sidebar_link {
+            justify-content: center;
+            padding: 12px 0;
+
+            .o_sidebar_icon {
+                margin: 0;
+            }
+        }
+
+        .o_sidebar_user {
+            padding: 12px 0;
+            justify-content: center;
+            display: flex;
+        }
+
+        .o_sidebar_avatar {
+            margin: 0 auto;
+        }
+
+        .o_sidebar_user_info,
+        .o_sidebar_submenu,
+        .o_sidebar_subheader,
+        .o_sidebar_chevron {
+            display: none !important;
+        }
+    }
+}
+
+.o_sidebar_header {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    height: 60px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .o_sidebar_brand_small {
+        display: none;
+    }
+}
+
+.o_sidebar_brand,
+.o_sidebar_brand_small {
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1;
+    font-size: 1rem;
+    white-space: nowrap;
+    padding-left: 4px;
+}
+
+.o_sidebar_nav {
+    padding: 8px 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.o_sidebar_link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-align: left;
+    font-size: 0.9rem;
+
+    &:hover {
+        background: #f0f0f0;
+        color: #000;
+    }
+}
+
+.o_sidebar_icon {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.o_sidebar_label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.15s ease;
+}
+
+.o_sidebar_user {
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.o_sidebar_avatar {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.o_sidebar_user_info {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.15s ease;
+}
+
+.o_sidebar_user_name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_sidebar_user_company {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #888;
+}
+
+.o_sidebar_menu_actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.o_sidebar_menu_btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: #888;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+}
+
+/* Sidebar — collapsible groups & submenu */
+.o_sidebar_group {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.o_sidebar_link_has_children {
+    justify-content: flex-start;
+}
+
+.o_sidebar_chevron {
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: #999;
+    transition: transform 0.15s ease;
+}
+
+.o_sidebar_chevron_open {
+    transform: rotate(180deg);
+}
+
+.o_sidebar_submenu {
+    background: #fafafa;
+    padding: 4px 0 8px;
+}
+
+.o_sidebar_subheader {
+    padding: 10px 16px 4px 40px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o_sidebar_sublink {
+    display: block;
+    width: 100%;
+    padding: 8px 16px 8px 40px;
+    border: none;
+    background: none;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    text-align: left;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+        background: #ececec;
+        color: #000;
+    }
+}
+
+body:has(.o_itmall_sidebar:not(.collapsed)) {
+    .o_main_navbar,
+    .o_action_manager {
+        margin-left: 240px;
+        transition: margin-left 0.2s ease;
+    }
+}
+
+body:has(.o_itmall_sidebar.collapsed) {
+    .o_main_navbar,
+    .o_action_manager {
+        margin-left: 60px;
+        transition: margin-left 0.2s ease;
+    }
+}
+
+/* ============================================================
+   IT Mall — Control Panel Buttons & Back Button
+   ============================================================ */
+.o_itmall_back_btn {
+    align-self: center !important;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%;
+    background: #fff;
+    color: #1a1a2e;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        background: #f0f0f0;
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    &:active {
+        background: #e2e8f0;
+    }
+
+    i {
+        font-size: 0.9rem;
+    }
+}
+
+.o_control_panel_breadcrumbs {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    min-height: 34px;
+
+    .o_breadcrumb {
+        align-self: center !important;
+        justify-content: center !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+
+        > div {
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+    }
+
+    .o_last_breadcrumb_item {
+        display: inline-flex !important;
+        align-items: center !important;
+        line-height: 1.5 !important;
+        font-size: 1rem !important;
+        margin: 0 !important;
+    }
+
+    .o_control_panel_breadcrumbs_actions {
+        display: inline-flex !important;
+        align-items: center !important;
+        margin: 0 !important;
+
+        .btn, button, i {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            vertical-align: middle !important;
+            line-height: 1 !important;
+        }
+    }
+}
+
+.o_control_panel_main_buttons {
+    display: flex;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    flex-shrink: 0;
+
+    .btn {
+        white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1.5 !important;
+        flex-shrink: 0;
+    }
+}
+
+/* ============================================================
+   IT Mall — Form save/discard buttons (match "New" size)
+   ============================================================ */
+.o_form_status_indicator_buttons .o_form_button_save,
+.o_form_status_indicator_buttons .o_form_button_cancel,
+.o_itmall_save_discard {
+    padding: 0.3125rem 0.625rem !important;
+    line-height: 1.5 !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.25rem !important;
+}
+
+.o_form_status_indicator_buttons .o_form_button_save i,
+.o_form_status_indicator_buttons .o_form_button_cancel i,
+.o_itmall_save_discard i {
+    font-size: 0.875rem !important;
+}
+
+/* ============================================================
+   IT Mall — Theme
+   ============================================================ */
+:root {
+    --primary: #2563eb;
+    --primary-rgb: 37, 99, 235;
+    --secondary: #64748b;
+    --secondary-rgb: 100, 116, 139;
+}
+
+/* Primary button */
+.btn-primary {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
+.btn-primary:not(:disabled):active {
+    background-color: #1e40af !important;
+    border-color: #1e40af !important;
+}
+
+/* Outline primary button */
+.btn-outline-primary {
+    color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+.btn-outline-primary:hover {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+}
+
+/* Links */
+a, .o_main_link_color, .o_link_color {
+    color: #2563eb !important;
+}
+a:hover, .o_main_link_color:hover {
+    color: #1d4ed8 !important;
+}
+
+/* Text primary */
+.text-primary {
+    color: #2563eb !important;
+}
+
+/* Background primary */
+.bg-primary {
+    background-color: #2563eb !important;
+}
+
+/* Border primary */
+.border-primary {
+    border-color: #2563eb !important;
+}
+
+/* Focus ring */
+.form-control:focus, .o_input:focus, .btn:focus {
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Primary badge */
+.badge-primary {
+    background-color: #2563eb !important;
+}
+
+/* Custom checkbox/radio */
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #2563eb !important;
+    background-color: #2563eb !important;
+}
+
+/* Switch */
+.custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+/* ============================================================
+   IT Mall — Centered Loading Overlay & Modern Spinner
+   ============================================================ */
+.o_loading_indicator {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    font-size: 0 !important;
+    color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    transition: opacity 0.25s ease !important;
+
+    /* Animated Ring Spinner */
+    &::before {
+        content: "" !important;
+        display: block !important;
+        width: 46px !important;
+        height: 46px !important;
+        border: 4px solid rgba(37, 99, 235, 0.15) !important;
+        border-top-color: #2563eb !important;
+        border-right-color: #38bdf8 !important;
+        border-radius: 50% !important;
+        animation: itmall-spin 0.75s cubic-bezier(0.65, 0, 0.35, 1) infinite !important;
+        margin-bottom: 14px !important;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25) !important;
+    }
+
+    /* Branded Loading Text */
+    &::after {
+        content: "Loading..." !important;
+        display: block !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+        color: #1e293b !important;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+}
+
+@keyframes itmall-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   IT Mall — Replace Odoo empty-state mascots with clean icons
+   ============================================================ */
+.o_view_nocontent_smiling_face:before,
+.o_view_nocontent_neutral_face:before,
+.o_view_nocontent_empty_folder:before {
+    background: none !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 30px auto !important;
+    font-family: "FontAwesome" !important;
+    font-size: 72px !important;
+    line-height: 1 !important;
+    color: #c3cad6 !important;
+}
+
+.o_view_nocontent_smiling_face:before {
+    content: "\f01c" !important; /* fa-inbox — nothing here yet */
+}
+
+.o_view_nocontent_neutral_face:before {
+    content: "\f002" !important; /* fa-search — no result */
+}
+
+.o_view_nocontent_empty_folder:before {
+    content: "\f115" !important; /* fa-folder-open-o — empty folder */
+}
+
+/* ============================================================
+   IT Mall — Kanban cards: rounded corners
+   ============================================================ */
+.o_kanban_record:not(.o_legacy_kanban_record),
+.o_kanban_renderer .o_legacy_kanban_record > div:not(.o_dropdown_kanban) {
+    border-radius: 8px !important;
+    border-color: #e2e6ea !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+.o_kanban_record:not(.o_legacy_kanban_record) aside img,
+.o_kanban_record:not(.o_legacy_kanban_record) .o_kanban_image_fill,
+.o_kanban_renderer .o_legacy_kanban_record .o_kanban_image_fill {
+    border-radius: 6px !important;
+}
+
+.o_kanban_record:not(.o_legacy_kanban_record):hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   IT Mall — List views: rounded card look
+   ============================================================ */
+.o_list_renderer {
+    border: 1px solid #e2e6ea !important;
+    border-radius: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+}
+
+.o_list_renderer thead th {
+    background-color: #f8fafc !important;
+    color: #1f293d !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+}
+
+.o_list_renderer tbody td {
+    border-color: #eef2f6 !important;
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+}
+
+.o_list_renderer tbody tr:hover {
+    background-color: #f0f7ff !important;
+}
+
+.o_list_renderer tbody tr.o_selected_row {
+    background-color: #e8f1ff !important;
+}
+
+/* ============================================================
+   IT Mall — Form views: rounded sheet corners only
+   ============================================================ */
+.o_form_sheet {
+    border-radius: 12px !important;
+}
+
+/* Remove horizontal separator lines under section titles */
+.o_horizontal_separator {
+    box-shadow: none !important;
+}
+
+/* ============================================================
+   IT Mall — Dark Mode Theme
+   ============================================================ */
+html:has(body.o_dark_mode),
+body.o_dark_mode,
+[data-bs-theme="dark"] {
+    --bs-body-bg: #0b0f19 !important;
+    --bs-body-color: #e2e8f0 !important;
+    --bs-tertiary-bg: #151d30 !important;
+    --bs-secondary-bg: #111827 !important;
+    --bs-border-color: #1f293d !important;
+    --border-color: #1f293d !important;
+    --table-border-color: #1f293d !important;
+    --bs-border-color-translucent: rgba(255, 255, 255, 0.08) !important;
+    --view-background: #0b0f19 !important;
+    --Kanban-background: #0b0f19 !important;
+    --KanbanRecord-background: #151d30 !important;
+    --KanbanRecord-border-color: #1f293d !important;
+    --ControlPanel-background: #111827 !important;
+    --ControlPanel-border-bottom: 1px solid #1f293d !important;
+    --Searchview-background: #0b0f19 !important;
+    --body-bg: #0b0f19 !important;
+    --body-color: #e2e8f0 !important;
+
+    background-color: #0b0f19 !important;
+    color: #e2e8f0 !important;
+
+    /* Custom Sleek Dark Scrollbars */
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    *::-webkit-scrollbar-track {
+        background: #0b0f19;
+    }
+    *::-webkit-scrollbar-thumb {
+        background: #1f293d;
+        border-radius: 4px;
+
+        &:hover {
+            background: #1f293d;
+        }
+    }
+
+    /* Dark Mode Loading Overlay */
+    .o_loading_indicator {
+        background: rgba(11, 15, 25, 0.78) !important;
+
+        &::before {
+            border: 4px solid rgba(255, 255, 255, 0.1) !important;
+            border-top-color: #38bdf8 !important;
+            border-right-color: #2563eb !important;
+            box-shadow: 0 0 24px rgba(56, 189, 248, 0.35) !important;
+        }
+
+        &::after {
+            color: #f8fafc !important;
+        }
+    }
+
+    /* Base Containers Across ALL Views (Kanban, Graphs, Pivot, Calendar, Activity, Form) */
+    .o_web_client,
+    .o_action_manager,
+    .o_content,
+    .o_view_controller,
+    .o_renderer,
+    .o_kanban_renderer,
+    .o_kanban_view,
+    .o_graph_view,
+    .o_graph_renderer,
+    .o_graph_canvas_container,
+    .o_pivot_view,
+    .o_pivot_renderer,
+    .o_calendar_view,
+    .o_calendar_renderer,
+    .o_calendar_container,
+    .o_activity_view,
+    .o_activity_renderer,
+    .o_form_view,
+    .o_form_sheet_bg,
+    .o_view_nocontent {
+        background-color: #0b0f19 !important;
+        color: #e2e8f0 !important;
+    }
+
+    /* Global Text & Typography in Dark Mode */
+    h1, h2, h3, h4, h5, h6,
+    .h1, .h2, .h3, .h4, .h5, .h6,
+    strong, b {
+        color: #ffffff !important;
+    }
+
+    .text-muted,
+    .text-secondary,
+    .text-black-50,
+    small,
+    .small {
+        color: #94a3b8 !important;
+    }
+
+    /* Empty state / No content helper (All views) */
+    .o_view_nocontent,
+    .o_nocontent_help {
+        background-color: #0b0f19 !important;
+        color: #e2e8f0 !important;
+
+        p,
+        span,
+        div,
+        h1, h2, h3, h4, h5, h6 {
+            color: #e2e8f0 !important;
+        }
+
+        p:first-of-type,
+        .o_view_nocontent_empty_folder,
+        .o_view_nocontent_smiling_face,
+        .o_view_nocontent_neutral_face {
+            color: #ffffff !important;
+            font-size: 1.25rem !important;
+            font-weight: 600 !important;
+        }
+
+        p:not(:first-of-type) {
+            color: #94a3b8 !important;
+            font-size: 0.95rem !important;
+        }
+
+        .btn,
+        .btn-light,
+        .btn-secondary,
+        .btn-default,
+        a.btn,
+        .btn-primary {
+            background-color: #151d30 !important;
+            border: 1px solid #1f293d !important;
+            color: #38bdf8 !important;
+            box-shadow: none !important;
+            text-decoration: none !important;
+            border-radius: 6px !important;
+            padding: 6px 16px !important;
+            font-weight: 500 !important;
+
+            &:hover {
+                background-color: #1e293b !important;
+                border-color: #38bdf8 !important;
+                color: #ffffff !important;
+            }
+        }
+
+        a:not(.btn) {
+            color: #38bdf8 !important;
+            text-decoration: underline !important;
+
+            &:hover {
+                color: #60a5fa !important;
+            }
+        }
+    }
+
+    .btn-light,
+    .btn-white {
+        background-color: #151d30 !important;
+        border-color: #1f293d !important;
+        color: #e2e8f0 !important;
+
+        &:hover {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            border-color: #38bdf8 !important;
+        }
+    }
+
+
+    /* Welcome Page */
+    .o_itmall_welcome {
+        background: #0b0f19 !important;
+
+        h1 {
+            color: #f8fafc !important;
+        }
+
+        .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        .card {
+            background-color: #151d30 !important;
+            border: 1px solid #1f293d !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+
+            .fs-2 {
+                color: #f8fafc !important;
+            }
+
+            .text-muted {
+                color: #94a3b8 !important;
+            }
+        }
+
+        .btn-outline-secondary {
+            color: #cbd5e1 !important;
+            border-color: #1f293d !important;
+            background-color: transparent !important;
+
+            &:hover {
+                color: #ffffff !important;
+                background-color: #1e293b !important;
+                border-color: #475569 !important;
+            }
+        }
+
+        .btn-outline-primary {
+            color: #38bdf8 !important;
+            border-color: #0284c7 !important;
+            background-color: transparent !important;
+
+            &:hover {
+                color: #ffffff !important;
+                background-color: #0284c7 !important;
+                border-color: #0284c7 !important;
+            }
+        }
+    }
+
+    /* Global Outline Buttons in Dark Mode */
+    .btn-outline-secondary {
+        color: #cbd5e1 !important;
+        border-color: #1f293d !important;
+
+        &:hover {
+            color: #ffffff !important;
+            background-color: #1e293b !important;
+            border-color: #475569 !important;
+        }
+    }
+
+    .btn-outline-primary {
+        color: #38bdf8 !important;
+        border-color: #0284c7 !important;
+
+        &:hover {
+            color: #ffffff !important;
+            background-color: #0284c7 !important;
+            border-color: #0284c7 !important;
+        }
+    }
+
+    /* Sidebar Dark Mode */
+    .o_itmall_sidebar {
+        background: #111827 !important;
+        color: #e2e8f0 !important;
+        border-right: 1px solid #1f293d !important;
+
+        .o_sidebar_header {
+            border-bottom: 1px solid #1f293d !important;
+        }
+
+        .o_sidebar_brand,
+        .o_sidebar_brand_small {
+            color: #f8fafc !important;
+        }
+
+        .o_sidebar_group {
+            border-bottom: 1px solid #1a2336 !important;
+        }
+
+        .o_sidebar_link {
+            color: #cbd5e1 !important;
+
+            &:hover {
+                background: #1f293d !important;
+                color: #ffffff !important;
+            }
+        }
+
+        .o_sidebar_submenu {
+            background: #0b0f19 !important;
+        }
+
+        .o_sidebar_subheader {
+            color: #64748b !important;
+        }
+
+        .o_sidebar_sublink {
+            color: #94a3b8 !important;
+
+            &:hover {
+                background: #1f293d !important;
+                color: #38bdf8 !important;
+            }
+        }
+
+        .o_sidebar_menu_actions {
+            border-bottom: 1px solid #1f293d !important;
+        }
+
+        .o_sidebar_menu_btn {
+            color: #94a3b8 !important;
+
+            &:hover {
+                background: #1f293d !important;
+                color: #f8fafc !important;
+            }
+        }
+
+        .o_sidebar_user {
+            border-top: 1px solid #1f293d !important;
+        }
+
+        .o_sidebar_user_name {
+            color: #f8fafc !important;
+        }
+
+        .o_sidebar_user_company {
+            color: #64748b !important;
+        }
+    }
+
+    /* Control Panel & Top Views (Clean single bottom border) */
+    .o_control_panel {
+        background-color: #111827 !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: none !important;
+        color: #e2e8f0 !important;
+    }
+
+    .o_control_panel_main,
+    .o_cp_top,
+    .o_cp_bottom,
+    .o_cp_searchview {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .o_content {
+        border-top: none !important;
+        box-shadow: none !important;
+    }
+
+    .o_control_panel {
+        .o_control_panel_breadcrumbs,
+        .o_last_breadcrumb_item,
+        .breadcrumb-item,
+        .o_breadcrumb {
+            color: #f8fafc !important;
+        }
+
+        .o_control_panel_breadcrumbs .fa-cog,
+        .o_control_panel_breadcrumbs .fa-gear,
+        .o_control_panel_breadcrumbs i {
+            color: #94a3b8 !important;
+        }
+
+        .btn-secondary {
+            background-color: #1e293b !important;
+            border-color: #1f293d !important;
+            color: #e2e8f0 !important;
+
+            &:hover {
+                background-color: #1f293d !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+
+    /* Pager & View Switcher Buttons */
+    .o_pager {
+        color: #cbd5e1 !important;
+
+        .btn {
+            background-color: #151d30 !important;
+            border-color: #1f293d !important;
+            color: #cbd5e1 !important;
+
+            &:hover {
+                background-color: #1f293d !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+
+    .o_cp_switch_buttons .btn,
+    .o_switch_view,
+    .o_cp_searchview .btn {
+        background-color: #151d30 !important;
+        border-color: #1f293d !important;
+        color: #94a3b8 !important;
+
+        &:hover {
+            background-color: #1f293d !important;
+            color: #f8fafc !important;
+        }
+
+        &.active,
+        &.selected {
+            background-color: #1f293d !important;
+            color: #38bdf8 !important;
+            border-color: #38bdf8 !important;
+        }
+    }
+
+    .o_itmall_back_btn {
+        background: #151d30 !important;
+        border-color: #1f293d !important;
+        color: #f8fafc !important;
+
+        &:hover {
+            background: #1f293d !important;
+            border-color: #38bdf8 !important;
+            color: #38bdf8 !important;
+        }
+    }
+
+    /* Search View & Facets (Sleek unified pill container) */
+    .o_searchview {
+        background-color: #151d30 !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 6px !important;
+        color: #e2e8f0 !important;
+
+        .o_searchview_input {
+            color: #f8fafc !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .o_searchview_facet {
+            background-color: #1e293b !important;
+            border: 1px solid #1f293d !important;
+            border-radius: 4px !important;
+            color: #f8fafc !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            overflow: hidden !important;
+
+            .o_searchview_facet_label {
+                background-color: #2563eb !important;
+                color: #ffffff !important;
+                border: none !important;
+                padding: 2px 6px !important;
+            }
+
+            .o_facet_values {
+                background-color: #1e293b !important;
+                color: #e2e8f0 !important;
+                border: none !important;
+                padding: 2px 6px !important;
+
+                * {
+                    background-color: transparent !important;
+                    color: #e2e8f0 !important;
+                }
+            }
+
+            .o_facet_remove {
+                background-color: transparent !important;
+                color: #94a3b8 !important;
+                padding: 0 4px !important;
+
+                &:hover {
+                    color: #ffffff !important;
+                }
+            }
+        }
+
+        .o_dropdown_button,
+        .o_searchview_more {
+            color: #94a3b8 !important;
+        }
+    }
+
+    /* Switch View Buttons (Kanban / List) */
+    .o_cp_switch_buttons {
+        .btn {
+            background-color: #151d30 !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #94a3b8 !important;
+
+            &.active {
+                background-color: #2563eb !important;
+                border-color: #2563eb !important;
+                color: #ffffff !important;
+            }
+
+            &:hover:not(.active) {
+                background-color: #1e293b !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+
+    /* Form View */
+    .o_form_view {
+        background-color: #0b0f19 !important;
+        color: #e2e8f0 !important;
+
+        h1, h2, h3, h4, h5, h6,
+        .oe_title,
+        .oe_title *,
+        .o_field_widget.oe_title,
+        .o_field_char.oe_title {
+            color: #f8fafc !important;
+        }
+
+        .o_form_label,
+        label.o_form_label,
+        .o_td_label,
+        .o_wrap_label {
+            color: #94a3b8 !important;
+            font-weight: 500 !important;
+        }
+
+        .o_field_widget:not(.badge):not(.o_tag),
+        .o_field_char,
+        .o_field_many2one,
+        .o_field_monetary,
+        .o_field_text {
+            color: #e2e8f0 !important;
+        }
+
+        .o_form_uri,
+        a.o_form_uri {
+            color: #38bdf8 !important;
+        }
+
+        .oe_subtotal_footer {
+            .o_td_label label {
+                color: #94a3b8 !important;
+            }
+
+            .oe_subtotal_footer_separator {
+                border-top: 1px solid #1f293d !important;
+
+                .o_form_label, label {
+                    color: #f8fafc !important;
+                    font-weight: 700 !important;
+                }
+
+                .o_field_monetary {
+                    color: #f8fafc !important;
+                    font-weight: 700 !important;
+                }
+            }
+        }
+
+        .o_field_x2many a,
+        .o_field_x2many_list a,
+        .o_field_x2many_list_row_add a {
+            color: #38bdf8 !important;
+
+            &:hover {
+                color: #7dd3fc !important;
+            }
+        }
+    }
+
+    .o_form_sheet_bg {
+        background-color: #0b0f19 !important;
+    }
+
+    .o_form_sheet {
+        background-color: #151d30 !important;
+        border: 1px solid #1f293d !important;
+        color: #e2e8f0 !important;
+
+        .o_group .o_td_label {
+            border-color: #1f293d !important;
+        }
+    }
+
+    /* Form Statusbar & Workflow Buttons */
+    .o_form_statusbar {
+        background-color: #111827 !important;
+        border-bottom: 1px solid #1f293d !important;
+
+        .o_statusbar_buttons {
+            .btn,
+            .btn-secondary {
+                background-color: #1e293b !important;
+                border-color: #1f293d !important;
+                color: #e2e8f0 !important;
+
+                &:hover {
+                    background-color: #1f293d !important;
+                    color: #ffffff !important;
+                }
+            }
+
+            .btn-primary {
+                background-color: #2563eb !important;
+                border-color: #2563eb !important;
+                color: #ffffff !important;
+
+                &:hover {
+                    background-color: #1d4ed8 !important;
+                }
+            }
+        }
+
+        .o_statusbar_status {
+            --o-statusbar-border: #111827 !important;
+            --o-statusbar-background-active: #2563eb !important;
+            --o-statusbar-border-active: #1d4ed8 !important;
+            --o-statusbar-background-hover: #1e293b !important;
+
+            .o_arrow_button {
+                background-color: #151d30 !important;
+                color: #94a3b8 !important;
+
+                &:hover, &:focus {
+                    background-color: #1e293b !important;
+                    color: #f8fafc !important;
+                }
+
+                &.o_arrow_button_current {
+                    background-color: #2563eb !important;
+                    color: #ffffff !important;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    /* Form Tabs / Notebook Header */
+    .o_notebook {
+        .nav-tabs,
+        .o_notebook_headers,
+        .nav {
+            background-color: #111827 !important;
+            border-bottom: 1px solid #1f293d !important;
+        }
+
+        .nav-link {
+            background-color: transparent !important;
+            color: #94a3b8 !important;
+            border: none !important;
+            border-bottom: 2px solid transparent !important;
+
+            &:hover {
+                color: #f8fafc !important;
+                background-color: #1a2336 !important;
+            }
+
+            &.active {
+                color: #38bdf8 !important;
+                background-color: #151d30 !important;
+                border-bottom: 2px solid #38bdf8 !important;
+            }
+        }
+
+        .tab-content {
+            background-color: #151d30 !important;
+        }
+    }
+
+    /* Chatter / Activity Panel */
+    .o_ChatterContainer,
+    .o-mail-Chatter,
+    .o_Chatter {
+        background-color: #0b0f19 !important;
+        border-left: 1px solid #1f293d !important;
+        color: #e2e8f0 !important;
+
+        .o_chatter_topbar,
+        .o-mail-Chatter-topbar {
+            background-color: #111827 !important;
+            border-bottom: 1px solid #1f293d !important;
+
+            .btn, button {
+                background-color: #1e293b !important;
+                border-color: #1f293d !important;
+                color: #e2e8f0 !important;
+
+                &:hover {
+                    background-color: #1f293d !important;
+                    color: #ffffff !important;
+                }
+
+                &.btn-primary {
+                    background-color: #2563eb !important;
+                    border-color: #2563eb !important;
+                    color: #ffffff !important;
+                }
+            }
+        }
+
+        .o-mail-Message,
+        .o_Message {
+            background-color: transparent !important;
+            color: #e2e8f0 !important;
+
+            .text-muted {
+                color: #94a3b8 !important;
+            }
+
+            strong, b {
+                color: #f8fafc !important;
+            }
+        }
+    }
+
+    /* Form Inputs & Controls (Clean Minimalist Underline Style matching Light Mode) */
+    .o_form_view {
+        .o_input,
+        .form-control,
+        input.o_input,
+        select.o_input {
+            background-color: transparent !important;
+            border-color: transparent transparent #1f293d transparent !important;
+            border-width: 0 0 1px 0 !important;
+            border-radius: 0 !important;
+            color: #f8fafc !important;
+            box-shadow: none !important;
+
+            &:focus {
+                border-color: transparent transparent #38bdf8 transparent !important;
+                background-color: rgba(56, 189, 248, 0.04) !important;
+            }
+        }
+
+        textarea.o_input {
+            background-color: transparent !important;
+            border: 1px solid #1f293d !important;
+            border-radius: 6px !important;
+            color: #f8fafc !important;
+
+            &:focus {
+                border-color: #38bdf8 !important;
+            }
+        }
+
+        .o_field_many2one .o_input_dropdown,
+        .o_field_widget {
+            background-color: transparent !important;
+        }
+    }
+
+    /* General Inputs outside Form View */
+    .o_searchview .o_searchview_input {
+        background-color: transparent !important;
+        color: #f8fafc !important;
+    }
+
+    /* List View */
+    .o_list_renderer {
+        background-color: #151d30 !important;
+        border-color: #1f293d !important;
+
+        table,
+        table.o_list_table {
+            --bs-table-bg: #151d30 !important;
+            --bs-table-color: #e2e8f0 !important;
+            background-color: #151d30 !important;
+            color: #e2e8f0 !important;
+            border-color: #1f293d !important;
+        }
+
+        thead th,
+        thead tr {
+            background-color: #111827 !important;
+            color: #94a3b8 !important;
+            border-bottom: 2px solid #1f293d !important;
+
+            button,
+            .btn,
+            .dropdown-toggle,
+            .o_dropdown,
+            .o_dropdown_button,
+            .o_search_options,
+            .o_column_sortable,
+            a,
+            span,
+            i {
+                background-color: transparent !important;
+                background: transparent !important;
+                border: none !important;
+                color: #94a3b8 !important;
+                box-shadow: none !important;
+
+                &:hover {
+                    background-color: #1e293b !important;
+                    color: #ffffff !important;
+                }
+            }
+        }
+
+        tbody tr,
+        tbody tr.o_data_row {
+            background-color: #151d30 !important;
+            color: #e2e8f0 !important;
+
+            td {
+                background-color: inherit !important;
+                border-color: #1f293d !important;
+                color: #e2e8f0 !important;
+            }
+
+            &:hover,
+            &:hover td {
+                background-color: #1a2336 !important;
+            }
+
+            &.o_selected_row,
+            &.o_selected_row td {
+                background-color: #1e293b !important;
+            }
+        }
+    }
+
+    /* Kanban View */
+    .o_kanban_view,
+    .o_kanban_renderer,
+    .o_renderer {
+        background-color: #0b0f19 !important;
+        border-top: none !important;
+        --Kanban-background: #0b0f19 !important;
+
+        .o_kanban_group {
+            background-color: #111827 !important;
+            border: 1px solid #1f293d !important;
+            border-radius: 8px !important;
+
+            .o_kanban_header {
+                color: #f8fafc !important;
+
+                .o_kanban_header_title,
+                .o_column_title,
+                .o_kanban_title,
+                b,
+                strong {
+                    color: #f8fafc !important;
+                    font-weight: 600;
+                }
+
+                .o_kanban_counter,
+                .o_kanban_counter_side,
+                .o_column_progress ~ span,
+                span,
+                div,
+                .text-muted,
+                .small {
+                    color: #94a3b8 !important;
+                }
+
+                .o_kanban_quick_add i,
+                .o_kanban_config i {
+                    color: #94a3b8 !important;
+
+                    &:hover {
+                        color: #f8fafc !important;
+                    }
+                }
+            }
+        }
+
+        /* Kanban Add Column / + Etape button & Quick Create */
+        .o_kanban_add_column,
+        .o_column_quick_create,
+        .o_column_quick_create .o_quick_create_folded,
+        .o_kanban_group_add {
+            background-color: #111827 !important;
+            border: 1px dashed #1f293d !important;
+            border-radius: 8px !important;
+            color: #94a3b8 !important;
+            box-shadow: none !important;
+
+            &:hover {
+                background-color: #151d30 !important;
+                border-color: #3b82f6 !important;
+                color: #f8fafc !important;
+            }
+
+            button, .btn, span, i, div {
+                background-color: transparent !important;
+                border: none !important;
+                color: inherit !important;
+                box-shadow: none !important;
+            }
+        }
+
+        .o_kanban_record {
+            background-color: #151d30 !important;
+            border-color: #1f293d !important;
+            color: #e2e8f0 !important;
+
+            /* All titles, headings, and field names in cards */
+            .o_kanban_record_title,
+            .o_kanban_record_heading,
+            .h1, .h2, .h3, .h4, .h5, .h6,
+            h1, h2, h3, h4, h5, h6,
+            .fs-5, .fs-6,
+            strong,
+            b,
+            .oe_partner_heading,
+            .fw-bold {
+                color: #f8fafc !important;
+            }
+
+            /* All Field values (contact name, company, subtitle, paragraphs, etc.) */
+            .o_field_widget:not(.badge):not(.o_tag),
+            .o_field_char,
+            .o_field_monetary,
+            .o_field_text,
+            .o_field_email,
+            .o_field_phone,
+            .o_kanban_record_subtitle,
+            .o_text_overflow,
+            p,
+            li {
+                color: #cbd5e1 !important;
+            }
+
+            .o_field_monetary {
+                color: #e2e8f0 !important;
+                font-weight: 500;
+            }
+
+            main {
+                color: #e2e8f0 !important;
+
+                .h1, .h2, .h3, .h4, .h5, .h6,
+                h1, h2, h3, h4, h5, h6 {
+                    color: #f8fafc !important;
+
+                    * {
+                        color: #f8fafc !important;
+                    }
+                }
+
+                span, div, p {
+                    color: #cbd5e1 !important;
+                }
+            }
+
+            .oe_kanban_details {
+                color: #cbd5e1 !important;
+
+                strong, b, .o_kanban_record_title {
+                    color: #f8fafc !important;
+                }
+
+                ul, li {
+                    color: #94a3b8 !important;
+                }
+
+                .o_text_overflow {
+                    color: #cbd5e1 !important;
+                }
+            }
+
+            .o_kanban_record_subtitle,
+            .o_text_overflow,
+            p,
+            span {
+                color: #cbd5e1 !important;
+            }
+
+            .text-muted {
+                color: #94a3b8 !important;
+            }
+
+            a {
+                color: #38bdf8 !important;
+            }
+
+            .o_kanban_record_bottom,
+            .oe_kanban_bottom_left,
+            .oe_kanban_bottom_right {
+                color: #94a3b8 !important;
+            }
+
+            /* Image containers */
+            aside,
+            .o_kanban_image,
+            .o_kanban_image_fill,
+            .o_kanban_image_inner,
+            .o_field_image {
+                background-color: transparent !important;
+                border: none !important;
+
+                img {
+                    border-radius: 6px !important;
+                }
+            }
+
+            /* Favorite star */
+            .o_favorite,
+            .o_boolean_favorite {
+                color: #94a3b8 !important;
+
+                &.active,
+                i.fa-star {
+                    color: #f59e0b !important;
+                }
+            }
+
+            /* Fix Tag/Badge text on light pastel backgrounds */
+            .o_tag,
+            .o_badge,
+            .badge:not(.btn),
+            .o_tag_badge_text,
+            .o_kanban_tags_section,
+            .o_field_many2many_tags {
+                &, & *, .o_tag_badge_text, span, div {
+                    color: #0f172a !important;
+                    font-weight: 600 !important;
+                }
+            }
+
+            &:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+            }
+        }
+    }
+
+    /* Graph View */
+    .o_graph_view,
+    .o_graph_renderer {
+        background-color: #0b0f19 !important;
+
+        .o_graph_canvas_container {
+            background-color: #0b0f19 !important;
+        }
+    }
+
+    /* Pivot View */
+    .o_pivot_view,
+    .o_pivot_renderer {
+        background-color: #0b0f19 !important;
+
+        table,
+        table.o_pivot_table {
+            background-color: #151d30 !important;
+            color: #e2e8f0 !important;
+
+            th {
+                background-color: #111827 !important;
+                color: #94a3b8 !important;
+                border-color: #1f293d !important;
+            }
+
+            td {
+                background-color: #151d30 !important;
+                color: #e2e8f0 !important;
+                border-color: #1f293d !important;
+            }
+        }
+    }
+
+    /* Calendar View in Dark Mode */
+    .o_calendar_view,
+    .o_calendar_renderer,
+    .o_calendar_container,
+    .o_calendar_wrapper {
+        background-color: #0b0f19 !important;
+        color: #e2e8f0 !important;
+
+        /* Calendar Top Header & Nav Buttons */
+        .o_calendar_header {
+            .btn,
+            .btn-secondary {
+                background-color: #151d30 !important;
+                border-color: #1f293d !important;
+                color: #f8fafc !important;
+
+                &:hover {
+                    background-color: #1f293d !important;
+                    color: #38bdf8 !important;
+                }
+            }
+
+            h5, .h5, span {
+                color: #f8fafc !important;
+            }
+        }
+
+        /* Sidebar Toggler */
+        .o_sidebar_toggler button,
+        .o_sidebar_toggler {
+            background-color: #151d30 !important;
+            border: 1px solid #1f293d !important;
+            color: #cbd5e1 !important;
+
+            &:hover {
+                background-color: #1f293d !important;
+                color: #38bdf8 !important;
+            }
+        }
+
+        /* FullCalendar Grid */
+        .fc-theme-standard,
+        .fc-theme-standard th,
+        .fc-theme-standard td,
+        .fc-scrollgrid,
+        .fc-theme-standard .fc-scrollgrid {
+            border-color: #1f293d !important;
+        }
+
+        .fc-col-header-cell {
+            background-color: #111827 !important;
+            color: #94a3b8 !important;
+            border-color: #1f293d !important;
+        }
+
+        .fc-day {
+            background-color: #151d30 !important;
+            border-color: #1f293d !important;
+        }
+
+        .fc-day-other {
+            background-color: #0f172a !important;
+        }
+
+        .fc-day-today {
+            background-color: #1e293b !important;
+        }
+
+        .fc-daygrid-day-number,
+        .fc-col-header-cell-cushion,
+        .fc-timegrid-slot-label-cushion {
+            color: #94a3b8 !important;
+            text-decoration: none !important;
+
+            &:hover {
+                color: #ffffff !important;
+            }
+        }
+
+        .fc-day-today .fc-daygrid-day-number {
+            color: #38bdf8 !important;
+            font-weight: 700;
+        }
+
+        /* Calendar Right Sidebar & Mini DateTimePicker */
+        .o_calendar_sidebar_container,
+        .o_calendar_sidebar {
+            background-color: #111827 !important;
+            border-left: 1px solid #1f293d !important;
+            color: #e2e8f0 !important;
+        }
+
+        .o_datetime_picker {
+            background-color: #151d30 !important;
+            border: 1px solid #1f293d !important;
+            border-radius: 8px !important;
+            color: #f8fafc !important;
+
+            .o_datetime_picker_header,
+            .o_header_part,
+            .o_zoom_out {
+                color: #f8fafc !important;
+
+                button, i {
+                    color: #cbd5e1 !important;
+
+                    &:hover {
+                        color: #ffffff !important;
+                    }
+                }
+            }
+
+            .o_day_of_week_cell {
+                color: #94a3b8 !important;
+            }
+
+            .o_date_item_cell {
+                color: #cbd5e1 !important;
+
+                &:hover {
+                    background-color: #1f293d !important;
+                    color: #ffffff !important;
+                }
+
+                &.o_other_month {
+                    color: #64748b !important;
+                }
+
+                &.o_selected,
+                &.o_current {
+                    background-color: #2563eb !important;
+                    color: #ffffff !important;
+                }
+            }
+        }
+
+        /* Filter Panel */
+        .o_calendar_filter {
+            background-color: transparent !important;
+            color: #e2e8f0 !important;
+
+            .o_calendar_filter_items_checkall,
+            .o_calendar_filter_item {
+                color: #cbd5e1 !important;
+            }
+        }
+    }
+
+    /* Activity View */
+    .o_activity_view,
+    .o_activity_renderer {
+        background-color: #0b0f19 !important;
+
+        table {
+            background-color: #151d30 !important;
+            color: #e2e8f0 !important;
+
+            th {
+                background-color: #111827 !important;
+                color: #94a3b8 !important;
+                border-color: #1f293d !important;
+            }
+
+            td {
+                background-color: #151d30 !important;
+                color: #e2e8f0 !important;
+                border-color: #1f293d !important;
+            }
+        }
+    }
+
+    /* Tags and Badges globally in Dark Mode */
+    .badge:not(.badge-primary):not(.bg-primary):not(.btn),
+    .o_tag,
+    .o_badge,
+    .o_tag_badge_text,
+    .o_kanban_tags_section,
+    .o_field_many2many_tags {
+        &, & *, .o_tag_badge_text, span, div {
+            color: #0f172a !important;
+            font-weight: 600 !important;
+        }
+    }
+
+    /* Modals & Dialogs */
+    .modal-content {
+        background-color: #151d30 !important;
+        border: 1px solid #1f293d !important;
+        color: #e2e8f0 !important;
+
+        .modal-header,
+        .modal-footer {
+            border-color: #1f293d !important;
+        }
+    }
+
+    /* Dropdowns */
+    .dropdown-menu {
+        background-color: #151d30 !important;
+        border-color: #1f293d !important;
+        color: #e2e8f0 !important;
+
+        .dropdown-item {
+            color: #cbd5e1 !important;
+
+            &:hover,
+            &:focus {
+                background-color: #1f293d !important;
+                color: #ffffff !important;
+            }
+        }
+
+        .dropdown-divider {
+            border-color: #1f293d !important;
+        }
+    }
+
+    /* Base Settings View */
+    .o_base_settings_view {
+        --settings__tab-bg: #111827 !important;
+        --settings__tab-bg--active: #151d30 !important;
+        --settings__tab-color: #94a3b8 !important;
+        --settings__title-bg: #111827 !important;
+
+        .o_form_renderer {
+            background-color: #0b0f19 !important;
+        }
+
+        .o_setting_container {
+            background-color: #0b0f19 !important;
+
+            .settings_tab {
+                background-color: #111827 !important;
+                border-right: 1px solid #1f293d !important;
+
+                .tab {
+                    color: #94a3b8 !important;
+
+                    &:hover {
+                        background-color: #1a2336 !important;
+                        color: #ffffff !important;
+                    }
+
+                    &.selected {
+                        background-color: #151d30 !important;
+                        color: #38bdf8 !important;
+                        box-shadow: inset 3px 0 0 #38bdf8 !important;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .settings {
+                background-color: #0b0f19 !important;
+                color: #e2e8f0 !important;
+
+                > .app_settings_block {
+                    h2 {
+                        background-color: #111827 !important;
+                        color: #f8fafc !important;
+                        border-top: 1px solid #1f293d !important;
+                        border-bottom: 1px solid #1f293d !important;
+                        font-weight: 600;
+                        padding-top: 0.6rem !important;
+                        padding-bottom: 0.6rem !important;
+                    }
+
+                    h3 {
+                        color: #cbd5e1 !important;
+                    }
+
+                    .o_settings_container {
+                        background-color: #0b0f19 !important;
+
+                        .o_setting_box {
+                            color: #e2e8f0 !important;
+
+                            .o_setting_right_pane {
+                                color: #e2e8f0 !important;
+
+                                .o_form_label,
+                                label {
+                                    color: #f8fafc !important;
+                                    font-weight: 600;
+                                }
+
+                                .text-muted,
+                                .text-muted * {
+                                    color: #94a3b8 !important;
+                                }
+
+                                a, .btn-link {
+                                    color: #38bdf8 !important;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .settingSearchHeader {
+                    background-color: #111827 !important;
+                    color: #f8fafc !important;
+                    border-bottom: 1px solid #1f293d !important;
+                }
+            }
+        }
+    }
+}
+
+/* ============================================================
+   IT Mall — Minimalist Phone Dialer (Clean & Compact)
+   ============================================================ */
+.o_dialer_circle_btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 50% !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+    user-select: none;
+
+    .num {
+        font-size: 22px;
+        font-weight: 400;
+        color: #1e293b;
+        line-height: 1.1;
+    }
+
+    .sub {
+        font-size: 8px;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 0.5px;
+        margin-top: -1px;
+    }
+
+    &:hover {
+        background-color: #f1f5f9 !important;
+        border-color: #cbd5e1 !important;
+    }
+
+    &:active {
+        background-color: #e2e8f0 !important;
+    }
+}
+
+.o_dialer_call_action_btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50% !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+    cursor: pointer;
+
+    i {
+        font-size: 26px;
+        color: #ffffff;
+    }
+
+    &.call {
+        background-color: #22c55e !important;
+        background: #22c55e !important;
+
+        &:hover {
+            background-color: #16a34a !important;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+        &:active {
+            background-color: #15803d !important;
+            opacity: 0.9;
+        }
+    }
+
+    &.hangup {
+        background-color: #ef4444 !important;
+        background: #ef4444 !important;
+
+        i {
+            transform: rotate(135deg);
+        }
+
+        &:hover {
+            background-color: #dc2626 !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        &:active {
+            background-color: #b91c1c !important;
+            opacity: 0.9;
+        }
+    }
+}
+
+/* Dark mode compatibility for Dialer */
+body.o_dark_mode, [data-bs-theme="dark"] {
+    .o_it_mall_dialer_clean {
+        background-color: #0f172a !important;
+
+        .text-dark {
+            color: #f8fafc !important;
+        }
+
+        .border-bottom {
+            border-color: #1f293d !important;
+        }
+
+        .o_dialer_circle_btn {
+            background-color: #1e293b !important;
+            border-color: #1f293d !important;
+
+            .num {
+                color: #f8fafc !important;
+            }
+            .sub {
+                color: #64748b !important;
+            }
+
+            &:hover {
+                background-color: #1f293d !important;
+            }
+        }
+    }
+}
+
+/* ============================================================
+   IT Mall — Enterprise White-Label Settings Cleanup
+   ============================================================ */
+
+/* 1. Hide "À propos" (About Odoo / QR Codes / Edition) */
+.o_settings_container #about,
+.o_settings_container [name="about_setting_container"],
+.o_settings_container .o_setting_box:has(.o_web_settings_user_avatar),
+.o_settings_container .o_setting_box:has(img[alt="Odoo"]),
+.o_settings_container .o_setting_box:has(a[href*="odoo.com"]),
+.o_settings_container .o_setting_box:has(.fa-qrcode) {
+    display: none !important;
+}
+
+/* 2. Hide Developer Tools (Mode Développeur) */
+.o_settings_container [name="res_config_dev_tool"],
+.o_settings_container .o_setting_box:has(a[href*="debug="]),
+.o_settings_container .o_setting_box:has(a[href*="debug"]),
+.o_settings_container [name="developer_setting_container"],
+.o_settings_container #developer_mode {
+    display: none !important;
+}
+
+/* 3. Hide all Enterprise upsell teaser badges and feature boxes */
+.o_enterprise_label,
+.o_settings_container .badge.text-bg-primary:contains("Entreprise"),
+.o_settings_container .badge.text-bg-primary:contains("Enterprise"),
+.o_settings_container .badge:has(.fa-star),
+.o_settings_container .o_setting_box:has(.o_enterprise_label),
+.o_settings_container .o_setting_box:has([widget="upgrade_boolean"]),
+.o_settings_container .o_setting_box:has([widget="upgrade_radio"]),
+.o_settings_container .o_setting_box:has(.badge.text-bg-primary),
+.o_settings_container .o_setting_box:has(span.badge.text-bg-primary),
+.o_settings_container .o_setting_box:has(span.badge:contains("Entreprise")),
+.o_settings_container .o_setting_box:has(span.badge:contains("Enterprise")),
+.o_settings_container #inter_company,
+.o_settings_container #pwa_settings {
+    display: none !important;
+}
+
+/* 4. Hide In-App Purchases (IAP) credit buying links */
+.o_settings_container [widget="iap_buy_more_credits"],
+.o_settings_container .o_setting_box:has([widget="iap_buy_more_credits"]),
+.o_settings_container .o_setting_box:has(button[name*="iap"]),
+.o_settings_container .o_setting_box:has(a[href*="iap"]),
+.o_settings_container button.btn-link:has(.oi-arrow-right):contains("crédits"),
+.o_settings_container button.btn-link:has(.oi-arrow-right):contains("services"),
+.o_settings_container a.btn-link:has(.oi-arrow-right):contains("crédits"),
+.o_settings_container a.btn-link:has(.oi-arrow-right):contains("services") {
+    display: none !important;
+}
+
+/* 5. Hide Odoo Documentation Links */
+.o_settings_container [widget="documentation_link"],
+.o_settings_container .o_doc_link,
+.o_settings_container a[href*="odoo.com/documentation"],
+.o_settings_container .fa-question-circle {
+    display: none !important;
+}
+
+/* 6. Hide unused app tabs from Settings left navigation (Keep only relevant core modules) */
+.o_setting_container .settings_tab .tab[data-key="project"],
+.o_setting_container .settings_tab .tab[data-key="mass_mailing"],
+.o_setting_container .settings_tab .tab[data-key="hr"],
+.o_setting_container .settings_tab .tab[data-key="calendar"] {
+    display: none !important;
+}
+
+/* ============================================================
+   IT Mall — Compact Vertical Cards (Kanban) & Refined List View
+   ============================================================ */
+
+/* 1. COMPACT VERTICAL CARDS (Refined Universal Kanban) */
+.o_kanban_renderer.o_kanban_ungrouped {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important;
+    padding: 0.5rem !important;
+
+    .o_kanban_record {
+        flex: 1 1 200px !important;
+        max-width: 220px !important;
+        min-width: 180px !important;
+        border-radius: 8px !important;
+        padding: 0.75rem !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+
+        /* IMAGE / AVATAR AT TOP (No rectangle border, clean centered image) */
+        aside,
+        .o_kanban_image,
+        .o_kanban_image_fill {
+            order: -1 !important;
+            width: 100% !important;
+            height: 90px !important;
+            min-height: 90px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 0 0.5rem 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            position: relative !important;
+
+            img {
+                max-height: 85px !important;
+                max-width: 100% !important;
+                width: auto !important;
+                object-fit: contain !important;
+            }
+        }
+
+        /* Contacts: Avatar, Letter Badges & Parent Logo */
+        > .d-flex {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            position: relative !important;
+
+            /* Avatar / Letter square */
+            > img,
+            > .o_image_64_cover,
+            > [class*="bg-"] {
+                order: -1 !important;
+                width: 72px !important;
+                height: 72px !important;
+                min-height: 72px !important;
+                max-width: 72px !important;
+                border-radius: 8px !important;
+                margin: 0 auto 0.5rem auto !important;
+                align-self: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 1.75rem !important;
+                font-weight: 700 !important;
+                color: #ffffff !important;
+                object-fit: cover !important;
+            }
+
+            /* Small company logo badge (like IT Mall badge) */
+            img:not(:first-child),
+            .o_kanban_image:not(:first-child) {
+                position: absolute !important;
+                bottom: 40% !important;
+                right: calc(50% - 44px) !important;
+                width: 24px !important;
+                height: 24px !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                border: 1px solid #e2e8f0 !important;
+                padding: 1px !important;
+            }
+
+            > div {
+                width: 100% !important;
+                text-align: left !important;
+            }
+        }
+
+        /* DETAILS AT BOTTOM */
+        main,
+        .o_kanban_record_details {
+            order: 1 !important;
+            width: 100% !important;
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            padding: 0 !important;
+
+            .h5, .o_kanban_record_title {
+                font-size: 0.825rem !important;
+                font-weight: 600 !important;
+                line-height: 1.25 !important;
+                margin-bottom: 0.2rem !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                min-height: 2.1em !important;
+            }
+
+            span:has([name="default_code"]),
+            [name="default_code"] {
+                font-size: 0.725rem !important;
+                color: #64748b !important;
+                font-family: monospace !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            span:has([name="list_price"]),
+            [name="list_price"] {
+                font-weight: 700 !important;
+                font-size: 0.875rem !important;
+                color: #0284c7 !important;
+                margin-top: auto !important;
+            }
+
+            span:has([name="qty_available"]),
+            [name="qty_available"] {
+                font-size: 0.775rem !important;
+                color: #16a34a !important;
+                font-weight: 600 !important;
+            }
+        }
+    }
+}
+
+/* 2. REFINED LIST VIEW (Zebra rows, distinct badges & prices) */
+.o_list_renderer {
+    table.o_list_table {
+        thead th {
+            background-color: #f1f5f9 !important;
+            color: #334155 !important;
+            font-weight: 700 !important;
+            font-size: 0.8rem !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            padding-top: 0.65rem !important;
+            padding-bottom: 0.65rem !important;
+        }
+
+        tbody {
+            /* Alternating Zebra Rows */
+            tr:nth-child(even) td {
+                background-color: #f8fafc !important;
+            }
+
+            tr:nth-child(odd) td {
+                background-color: #ffffff !important;
+            }
+
+            tr:hover td {
+                background-color: #eff6ff !important;
+            }
+
+            tr.o_data_row.o_selected_row td {
+                background-color: #e0f2fe !important;
+            }
+
+            tr td {
+                border-bottom: 1px solid #f1f5f9 !important;
+                padding-top: 0.55rem !important;
+                padding-bottom: 0.55rem !important;
+                font-size: 0.85rem !important;
+
+                /* Product / Record Name */
+                &[name="name"],
+                &[name="display_name"],
+                &[data-field="name"] {
+                    font-weight: 600 !important;
+                    color: #0f172a !important;
+                }
+
+                /* Reference code badge */
+                &[name="default_code"],
+                &[data-field="default_code"] {
+                    font-family: monospace !important;
+                    font-weight: 600 !important;
+                    color: #475569 !important;
+                }
+
+                /* Price / Amount columns in Blue */
+                &[name="list_price"],
+                &[name="amount_total"],
+                &[name="price_unit"],
+                &[data-field="list_price"],
+                &[data-field="amount_total"] {
+                    color: #0284c7 !important;
+                    font-weight: 700 !important;
+                }
+
+                /* Stock Available highlight */
+                &[name="qty_available"],
+                &[data-field="qty_available"] {
+                    font-weight: 600 !important;
+                    color: #16a34a !important;
+                }
+
+                /* Status pills */
+                .badge,
+                &[name="state"] .badge,
+                &[name="invoice_status"] .badge {
+                    border-radius: 9999px !important;
+                    font-weight: 600 !important;
+                    font-size: 0.75rem !important;
+                    padding: 3px 8px !important;
+                }
+            }
+        }
+    }
+}
+
+/* 3. HIDE ONLY FAVORITE STARS (Preserve CRM Lead Priority) */
+.o_favorite,
+.o_field_favorite,
+.o_field_boolean_favorite,
+[name="is_favorite"],
+th[data-name="is_favorite"],
+td[name="is_favorite"],
+th:has(.o_favorite),
+th:has([name="is_favorite"]),
+td:has(.o_favorite),
+td:has([name="is_favorite"]),
+.o_kanban_renderer.o_kanban_ungrouped .o_favorite,
+.o_kanban_renderer.o_kanban_ungrouped .o_field_favorite,
+.o_kanban_renderer.o_kanban_ungrouped .o_field_boolean_favorite,
+.o_kanban_renderer.o_kanban_ungrouped [name="is_favorite"],
+.o_kanban_renderer.o_kanban_ungrouped .fa-star-o:not(.o_priority *),
+.o_kanban_renderer.o_kanban_ungrouped button:has(.fa-star-o):not(.o_priority) {
+    display: none !important;
+}
+
+/* EXPLICITLY KEEP CRM PIPELINE PRIORITY STARS VISIBLE */
+.o_kanban_grouped .o_priority,
+.o_kanban_grouped [name="priority"],
+.o_kanban_grouped .o_field_priority,
+.o_kanban_grouped .fa-star,
+.o_kanban_grouped .fa-star-o,
+.o_crm_lead_kanban .o_priority {
+    display: inline-block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 4. DARK MODE SUPPORT */
+body.o_dark,
+[data-color-mode="dark"] {
+    .o_kanban_renderer.o_kanban_ungrouped .o_kanban_record {
+        aside,
+        .o_kanban_image,
+        .o_kanban_image_fill {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        main {
+            span:has([name="list_price"]),
+            [name="list_price"] {
+                color: #38bdf8 !important;
+            }
+
+            span:has([name="default_code"]),
+            [name="default_code"] {
+                color: #94a3b8 !important;
+            }
+        }
+    }
+
+    .o_list_renderer table.o_list_table {
+        thead th {
+            background-color: #0f172a !important;
+            color: #94a3b8 !important;
+            border-bottom-color: #1e293b !important;
+        }
+
+        tbody {
+            tr:nth-child(even) td {
+                background-color: #151d30 !important;
+            }
+
+            tr:nth-child(odd) td {
+                background-color: #0b0f19 !important;
+            }
+
+            tr:hover td {
+                background-color: #1e293b !important;
+            }
+
+            tr td {
+                border-bottom-color: #1e293b !important;
+                color: #cbd5e1 !important;
+
+                &[name="name"],
+                &[name="display_name"],
+                &[data-field="name"] {
+                    color: #f8fafc !important;
+                }
+
+                &[name="list_price"],
+                &[name="amount_total"],
+                &[name="price_unit"] {
+                    color: #38bdf8 !important;
+                }
+            }
+        }
+    }
+
+    /* Large width for Call Log Assigned Team column */
+    .o_list_table th[data-name="assigned_user_ids"],
+    .o_list_table td[name="assigned_user_ids"] {
+        min-width: 220px !important;
+        width: 260px !important;
+    }
+}

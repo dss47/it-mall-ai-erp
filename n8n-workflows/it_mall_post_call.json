@@ -1,0 +1,490 @@
+{
+  "name": "IT Mall Post-Call",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hotline",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        96
+      ],
+      "id": "webhook-node",
+      "name": "Webhook",
+      "webhookId": "hotline-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-partner",
+              "leftValue": "={{ ($json.body && $json.body.partner_id) || $json.partner_id || '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -384,
+        96
+      ],
+      "id": "if-partner-node",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8069/jsonrpc",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"call\",\n  \"params\": {\n    \"service\": \"object\",\n    \"method\": \"execute_kw\",\n    \"args\": [\n      $env.ODOO_DB || \"it_mall_db\",\n      parseInt($env.ODOO_UID || \"2\"),\n      $env.ODOO_PASS || \"YOUR_ODOO_RPC_PASSWORD\",\n      \"res.partner\",\n      \"create\",\n      [\n        {\n          \"name\": $('Webhook').item.json.body.caller_name || 'Client Inconnu',\n          \"phone\": $('Webhook').item.json.body.caller_phone || '',\n          \"comment\": \"Créé automatiquement par Hotline IA\"\n        }\n      ]\n    ]\n  },\n  \"id\": 1\n}) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -176,
+        288
+      ],
+      "id": "create-partner-node",
+      "name": "Créer Contact Client (res.partner)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge Webhook data + Partner ID + STRICT Intent from AI Engine\nconst wb = $('Webhook').first().json.body || $('Webhook').first().json;\nlet newPartnerId = null;\ntry {\n  if ($('Créer Contact Client (res.partner)').isExecuted) {\n    newPartnerId = $('Créer Contact Client (res.partner)').first()?.json?.result;\n  }\n} catch (e) {\n  newPartnerId = null;\n}\n\nconst partnerId = wb.partner_id || newPartnerId || false;\nconst callerName = wb.caller_name || \"Client\";\nconst callerPhone = wb.caller_phone || \"\";\nconst motif = wb.motif || \"Demande\";\nconst transcript = wb.transcript || \"\";\n\n// Format clean phone for WhatsApp\nlet cleanPhone = callerPhone.replace(/\\D/g, '');\nif (cleanPhone.startsWith('0') && cleanPhone.length === 10) {\n  cleanPhone = '212' + cleanPhone.substring(1);\n} else if (cleanPhone.startsWith('2120')) {\n  cleanPhone = '212' + cleanPhone.substring(4);\n}\nif (!cleanPhone) cleanPhone = \"212694992392\";\n\n// 1. STRICT INTENT ENFORCEMENT : Use strictly what the Voice AI Engine decided\n// DO NOT do regex / keyword search on transcript to avoid false positives!\nlet intentType = wb.intent_type || \"general_inquiry\";\n\n// Only allow quote_request if items were actually specified and revenue > 0\nif (intentType === \"quote_request\" && (!wb.items || wb.items.length === 0) && (!wb.expected_revenue || wb.expected_revenue === 0)) {\n  intentType = \"general_inquiry\";\n}\n\n// 2. Extract Quantity & Product Lines (ONLY for genuine quote_request)\nlet qty = 1;\nlet matchedProdId = 181;\nlet unitPrice = 0;\nlet expectedRevenue = 0;\n\nif (intentType === \"quote_request\") {\n  if (Array.isArray(wb.items) && wb.items.length > 0) {\n    const firstItem = wb.items[0];\n    qty = firstItem.quantity || 1;\n    unitPrice = firstItem.unit_price || 0;\n    expectedRevenue = wb.expected_revenue || (unitPrice * qty);\n  } else {\n    expectedRevenue = Number(wb.expected_revenue) || 1500;\n  }\n}\n\nlet leadTitlePrefix = \"[IA INFO] \";\nif (intentType === \"order_cancellation\") leadTitlePrefix = \"[IA ANNULATION] \";\nelse if (intentType === \"support_urgent\") leadTitlePrefix = \"[IA URGENCE] \";\nelse if (intentType === \"quote_request\") leadTitlePrefix = \"[IA DEVIS] \";\n\n// Prepare clean WhatsApp message body\nlet messageText = `Bonjour Mr. ${callerName} 👋,\\n\\nNous vous remercions sincèrement d'avoir contacté IT Mall ! 🏢\\n\\n📋 Votre demande d'information : ${motif}\\n\\n👨‍💼 Un conseiller commercial étudie votre besoin et vous recontacte très rapidement.\\n\\nToute l'équipe d'IT Mall vous remercie chaleureusement pour votre confiance et reste à votre entière disposition.`;\n\nif (intentType === \"order_cancellation\") {\n  messageText = `Bonjour Mr. ${callerName} 👋,\\n\\nNous vous remercions d'avoir contacté IT Mall ! 🏢\\n\\n❌ Votre demande d'annulation a bien été prise en compte :\\n📋 Motif : ${motif}\\n\\n👨‍💼 Notre service client traite votre dossier dans les meilleurs délais.\\n\\nToute l'équipe d'IT Mall reste à votre entière disposition.`;\n} else if (intentType === \"quote_request\") {\n  messageText = `Bonjour Mr. ${callerName} 👋,\\n\\nNous vous remercions chaleureusement d'avoir fait appel à IT Mall ! 🏢\\n\\n📄 Votre devis officiel a bien été généré suite à votre appel.\\n📋 Objet : ${motif}\\n\\n👨‍💼 Tous les détails chiffrés sont consultables dans votre devis en pièce jointe.\\n\\nToute l'équipe d'IT Mall vous remercie chaleureusement pour votre confiance et se tient à votre entière disposition !`;\n} else if (intentType === \"support_urgent\") {\n  messageText = `Bonjour Mr. ${callerName} 👋,\\n\\nNous vous remercions d'avoir contacté le Support IT Mall ! 🏢\\n\\n🚨 Signalement urgent bien enregistré : ${motif}\\n\\n👨‍🔧 Notre équipe technique a pris en charge votre demande en priorité absolue.\\n\\nToute l'équipe IT Mall reste mobilisée à vos côtés.`;\n}\n\nreturn [{\n  json: {\n    partner_id: partnerId,\n    intent_type: intentType,\n    motif: motif,\n    caller_name: callerName,\n    caller_phone: callerPhone,\n    clean_phone: cleanPhone,\n    message_text: messageText,\n    transcript: transcript,\n    priority: (intentType === \"support_urgent\" || intentType === \"order_cancellation\") ? \"3\" : \"2\",\n    expected_revenue: expectedRevenue,\n    lead_name: leadTitlePrefix + motif + \" - \" + callerName,\n    product_id: matchedProdId,\n    quantity: qty,\n    unit_price: unitPrice\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        16
+      ],
+      "id": "prepare-data-node",
+      "name": "Préparer Données Appel"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.intent_type }}",
+                    "rightValue": "quote_request",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.intent_type }}",
+                    "rightValue": "general_inquiry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.intent_type }}",
+                    "rightValue": "support_urgent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.intent_type }}",
+                    "rightValue": "order_cancellation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        256,
+        0
+      ],
+      "id": "switch-intent-node",
+      "name": "Aiguillage par Intention"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8069/jsonrpc",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"call\",\n  \"params\": {\n    \"service\": \"object\",\n    \"method\": \"execute_kw\",\n    \"args\": [\n      $env.ODOO_DB || \"it_mall_db\",\n      parseInt($env.ODOO_UID || \"2\"),\n      $env.ODOO_PASS || \"YOUR_ODOO_RPC_PASSWORD\",\n      \"crm.lead\",\n      \"create\",\n      [\n        {\n          \"name\": $('Préparer Données Appel').item.json.lead_name,\n          \"stage_id\": 41,\n          \"partner_id\": $('Préparer Données Appel').item.json.partner_id || false,\n          \"contact_name\": $('Préparer Données Appel').item.json.caller_name,\n          \"phone\": $('Préparer Données Appel').item.json.caller_phone,\n          \"expected_revenue\": $('Préparer Données Appel').item.json.expected_revenue,\n          \"priority\": $('Préparer Données Appel').item.json.priority,\n          \"description\": \"Demande de devis IA.\\n\\nMotif: \" + $('Préparer Données Appel').item.json.motif + \"\\n\\nConversation:\\n\" + $('Préparer Données Appel').item.json.transcript\n        }\n      ]\n    ]\n  },\n  \"id\": 1\n}) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        -144
+      ],
+      "id": "create-lead-quote-node",
+      "name": "Créer Opportunité CRM"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8069/jsonrpc",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.payload) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1136,
+        -144
+      ],
+      "id": "create-sale-order-node",
+      "name": "Créer Devis Vente Odoo"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1328,
+        256
+      ],
+      "id": "wait-10s-node",
+      "name": "Attente 10s",
+      "webhookId": "wait-10s-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8301/send_quote_pdf",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  \"order_id\": $json.result,\n  \"phone\": $('Préparer Données Appel').item.json.caller_phone,\n  \"quote_ref\": \"S000\" + $json.result,\n  \"name\": $('Préparer Données Appel').item.json.caller_name,\n  \"amount\": $('Préparer Données Appel').item.json.expected_revenue\n}) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        -144
+      ],
+      "id": "send-quote-pdf-node",
+      "name": "Générer & Envoyer Devis PDF"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v20.0/1276761165518057/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_META_WHATSAPP_TOKEN_HERE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": $('Préparer Données Appel').item.json.clean_phone,\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": $('Préparer Données Appel').item.json.message_text\n  }\n}) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        256
+      ],
+      "id": "whatsapp-http-node",
+      "name": "Notification WhatsApp"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8069/jsonrpc",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  jsonrpc: \"2.0\",\n  method: \"call\",\n  params: {\n    service: \"object\",\n    method: \"execute_kw\",\n    args: [\n      $env.ODOO_DB || \"it_mall_db\",\n      parseInt($env.ODOO_UID || \"2\"),\n      $env.ODOO_PASS || \"YOUR_ODOO_RPC_PASSWORD\",\n      \"product.product\",\n      \"search_read\",\n      [[[\"name\", \"ilike\", ($('Webhook').first().json.body?.items?.[0]?.product_name || $('Préparer Données Appel').first().json.motif)]]],\n      { fields: [\"id\", \"name\", \"list_price\"], limit: 1 }\n    ]\n  },\n  id: 1\n}) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        720,
+        -144
+      ],
+      "id": "01d4ca38-834e-4064-8fa7-76c0ed78555c",
+      "name": "Chercher Produit Odoo"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst partnerId = $('Préparer Données Appel').first().json.partner_id || 101;\nconst oppId = $('Créer Opportunité CRM').first().json.result || false;\nconst searchRes = $('Chercher Produit Odoo').first().json.result;\nconst prepData = $('Préparer Données Appel').first().json;\n\nlet prodId = prepData.product_id;\nlet unitPrice = prepData.unit_price;\n\nif (Array.isArray(searchRes) && searchRes.length > 0) {\n  prodId = searchRes[0].id;\n  unitPrice = searchRes[0].list_price;\n}\n\nconst payload = {\n  jsonrpc: \"2.0\",\n  method: \"call\",\n  params: {\n    service: \"object\",\n    method: \"execute_kw\",\n    args: [\n      $env.ODOO_DB || \"it_mall_db\",\n      parseInt($env.ODOO_UID || \"2\"),\n      $env.ODOO_PASS || \"YOUR_ODOO_RPC_PASSWORD\",\n      \"sale.order\",\n      \"create\",\n      [\n        {\n          partner_id: partnerId,\n          opportunity_id: oppId,\n          order_line: [\n            [0, 0, {\n              product_id: prodId,\n              product_uom_qty: prepData.quantity || 1,\n              price_unit: unitPrice\n            }]\n          ]\n        }\n      ]\n    ]\n  },\n  id: 2\n};\n\nreturn [{ json: { payload: payload } }];\n"
+      },
+      "id": "prep-devis-rpc-node",
+      "name": "Préparer Devis RPC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -144
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Préparer Données Appel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Créer Contact Client (res.partner)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Contact Client (res.partner)": {
+      "main": [
+        [
+          {
+            "node": "Préparer Données Appel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Données Appel": {
+      "main": [
+        [
+          {
+            "node": "Aiguillage par Intention",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aiguillage par Intention": {
+      "main": [
+        [
+          {
+            "node": "Créer Opportunité CRM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        []
+      ]
+    },
+    "Créer Opportunité CRM": {
+      "main": [
+        [
+          {
+            "node": "Chercher Produit Odoo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Devis Vente Odoo": {
+      "main": [
+        [
+          {
+            "node": "Générer & Envoyer Devis PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attente 10s": {
+      "main": [
+        [
+          {
+            "node": "Notification WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Générer & Envoyer Devis PDF": {
+      "main": [
+        [
+          {
+            "node": "Attente 10s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chercher Produit Odoo": {
+      "main": [
+        [
+          {
+            "node": "Préparer Devis RPC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Devis RPC": {
+      "main": [
+        [
+          {
+            "node": "Créer Devis Vente Odoo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
+}

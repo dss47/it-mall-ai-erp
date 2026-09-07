@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Règle Admin : Les administrateurs voient absolument TOUS les appels -->
+        <record id="rule_it_mall_call_log_admin" model="ir.rule">
+            <field name="name">Journal d'appels : Accès Total Administrateur</field>
+            <field name="model_id" ref="model_it_mall_call_log"/>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <!-- Règle Commercial (Ventes) : Voit les appels commerciaux, ou assignés à lui, ou publics -->
+        <record id="rule_it_mall_call_log_sales" model="ir.rule">
+            <field name="name">Journal d'appels : Rôle Commercial</field>
+            <field name="model_id" ref="model_it_mall_call_log"/>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="domain_force">['|', '|', ('target_role', 'in', ['sales', 'all']), ('user_id', '=', user.id), ('target_role', '=', False)]</field>
+        </record>
+
+        <!-- Règle Logistique (Inventaire / Stock) : Voit les appels d'annulation/stock -->
+        <record id="rule_it_mall_call_log_stock" model="ir.rule">
+            <field name="name">Journal d'appels : Rôle Logistique &amp; Stock</field>
+            <field name="model_id" ref="model_it_mall_call_log"/>
+            <field name="groups" eval="[(4, ref('stock.group_stock_user'))]"/>
+            <field name="domain_force">['|', '|', ('target_role', 'in', ['stock', 'all']), ('user_id', '=', user.id), ('target_role', '=', False)]</field>
+        </record>
+
+        <!-- Règle Facturation (Comptabilité) : Voit les appels de facturation -->
+        <record id="rule_it_mall_call_log_account" model="ir.rule">
+            <field name="name">Journal d'appels : Rôle Comptabilité</field>
+            <field name="model_id" ref="model_it_mall_call_log"/>
+            <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+            <field name="domain_force">['|', '|', ('target_role', 'in', ['account', 'all']), ('user_id', '=', user.id), ('target_role', '=', False)]</field>
+        </record>
+    </data>
+</odoo>

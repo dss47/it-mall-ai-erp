@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="it_mall_branding.ControlPanelBackButton"
+       t-inherit="web.ControlPanel"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_control_panel_breadcrumbs')]" position="before">
+            <button t-if="canGoBack"
+                    t-on-click="goBack"
+                    class="btn o_itmall_back_btn d-print-none"
+                    title="Back"
+                    aria-label="Back">
+                <i class="fa fa-arrow-left"/>
+            </button>
+        </xpath>
+    </t>
+</templates>
