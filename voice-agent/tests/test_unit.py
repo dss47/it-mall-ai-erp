@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, "/opt/voice-agent")
 
 from agent import db
 from agent.engine import _capture_meta
@@ -82,27 +82,119 @@ check("strip_offer retire l'offre",
 check("strip_offer garde une phrase normale",
       strip_offer("Nous avons le Répéteur wifi 6 à 49€ en stock.") == "Nous avons le Répéteur wifi 6 à 49€ en stock.")
 
-# --- registry : navigation fluide et clôture ---
+# --- registry : parcours complet (exemple utilisateur) ---
 r = Registry()
 adv = r.advance("Je voudrais des informations sur vos routeurs wifi 6")
 check("free → mode free", adv["mode"] == "free")
 check("free → step free", r.step == "free")
 
-adv_bye = r.advance("Au revoir et merci")
-check("adieu → mode end", adv_bye["mode"] == "end")
+# après une réponse produit, le moteur met step=propose_register
+r.state["step"] = "propose_register"
+adv = r.advance("Oui")
+check("offre acceptée → ask_name", adv["mode"] == "speak" and r.step == "ask_name")
+check("offre directive demande le nom", "nom" in adv["directive"].lower())
 
-# --- extraction naturelle du nom & analyse via _capture_meta ---
-state = {"name": "", "motif": "", "done": False}
-_capture_meta(state, {
-    "reply_text": "Très bien M. Karim Mansouri, je note votre demande de devis.",
-    "analysis": {"caller_name": "Karim Mansouri", "category": "produit", "intent_type": "devis"}
-}, fallback_text="Je m'appelle Karim Mansouri")
+# accord formulé autrement que "Oui" (ex. "d'accord", "je veux bien")
+for accord in ("D'accord", "d'accord", "Ok", "Bien sûr", "Je veux bien", "Ouais"):
+    r_ok = Registry()
+    r_ok.state["step"] = "propose_register"
+    adv_ok = r_ok.advance(accord)
+    check("accord %r → ask_name" % accord,
+          adv_ok["mode"] == "speak" and r_ok.step == "ask_name")
 
-check("nom capturé depuis analysis", state["name"] == "Karim Mansouri")
-check("done marqué à True", state["done"] is True)
-check("category enregistrée", state["category"] == "produit")
-check("intent_type enregistré", state["intent_type"] == "devis")
+adv = r.advance("Ahmed Benali")
+check("nom capturé → confirm_name", adv["mode"] == "speak" and r.step == "confirm_name")
+check("nom stocké", r.state["name"] == "Ahmed Benali")
+check("directive confirme le nom", "Ahmed Benali" in adv["directive"])
 
+# --- registry : nom en écriture non latine → llm_name ---
+r_ar = Registry()
+r_ar.state["step"] = "ask_name"
+adv = r_ar.advance("Aحمد بن Ali")
+check("nom non-latin → llm_name", adv["mode"] == "speak" and adv.get("llm_name") is True)
+check("nom non-latin : pas encore confirmé", r_ar.step == "ask_name")
+
+# --- registry : correction du nom en confirm_name ---
+r_fix = Registry()
+r_fix.state["step"] = "confirm_name"
+r_fix.state["name"] = "Ah"
+adv = r_fix.advance("Ahmed Ahmed")
+check("confirm_name : nom corrigé sans 'Non'", adv["mode"] == "speak")
+check("confirm_name : nom mis à jour", r_fix.state["name"] == "Ahmed")
+check("confirm_name : reste en confirmation", r_fix.step == "confirm_name")
+check("confirm_name : directive cite le nouveau nom", "Ahmed" in adv["directive"])
+
+adv = r.advance("Oui, c'est ça")
+check("nom confirmé → ask_phone", adv["mode"] == "speak" and r.step == "ask_phone")
+check("ask_phone = recitation (haute patience)", r.expectation() == "recitation")
+
+adv = r.advance("Zéro six")
+check("dictée partielle → silent (pas de coupure)", adv["mode"] == "silent")
+check("téléphone partiel '06'", r.state["phone"] == "06")
+
+adv = r.advance("vingt-deux")
+check("dictée 2 → silent", adv["mode"] == "silent" and r.state["phone"] == "0622")
+
+adv = r.advance("quarante-quatre")
+adv = r.advance("cinquante et un")
+adv = r.advance("zéro trois")
+check("numéro complet → confirm_phone", r.step == "confirm_phone")
+check("numéro final 0622445103", r.state["phone"] == "0622445103")
+check("directive répète le numéro", "répète" in adv["directive"] or "Répète" in adv["directive"])
+
+adv = r.advance("Exact")
+check("confirmation → done", adv["mode"] == "done")
+check("done flag posé", r.state["done"] is True)
+check("retour à free", r.step == "free")
+
+adv = r.advance("Autre chose : vous avez des switchs ?")
+check("après done, jamais re-collect (free)", adv["mode"] == "free")
+
+# --- registry : refus d'inscription ---
+r2 = Registry()
+r2.state["step"] = "propose_register"
+adv = r2.advance("Non merci")
+check("refus → retour free", adv["mode"] == "speak" and r2.step == "free")
+check("aucun nom collecté après refus", r2.state["name"] == "")
+
+# --- registry : nom faux ---
+r3 = Registry()
+r3.state["step"] = "confirm_name"
+r3.state["name"] = "Ahmed Benali"
+adv = r3.advance("Non, c'est Ahmed Bellal")
+check("nom faux → re-ask_name", adv["mode"] == "speak" and r3.step == "ask_name")
+check("nom effacé", r3.state["name"] == "")
+
+# --- registry : numéro faux ---
+r4 = Registry()
+r4.state["step"] = "confirm_phone"
+r4.state["phone"] = "0622445103"
+adv = r4.advance("Non")
+check("numéro faux → re-ask_phone", adv["mode"] == "speak" and r4.step == "ask_phone")
+check("numéro effacé", r4.state["phone"] == "")
+
+# --- registry : adieu pendant enregistrement ---
+r5 = Registry()
+r5.state["step"] = "ask_name"
+adv = r5.advance("Merci au revoir")
+check("adieu → mode end", adv["mode"] == "end")
+
+# --- registry : demande de conseiller → dossier d'abord puis clôture ---
+r_h = Registry()
+r_h.state["human_requested"] = True
+r_h.state["step"] = "ask_name"
+adv = r_h.advance("Non merci")
+check("conseiller : refus du nom → clôture", adv["mode"] == "end")
+
+r_h2 = Registry()
+r_h2.state["human_requested"] = True
+r_h2.state["step"] = "confirm_phone"
+r_h2.state["name"] = "Saad"
+r_h2.state["phone"] = "0661223344"
+adv = r_h2.advance("Oui")
+check("conseiller : numéro confirmé → done human_close",
+      adv["mode"] == "done" and adv.get("human_close") is True)
+check("conseiller : rassuré par rappel conseiller", "conseiller" in adv["directive"])
 
 # --- filters : clôture contrôlée ---
 check("is_farewell au revoir", is_farewell("au revoir"))
@@ -148,7 +240,5 @@ _capture_meta(_mst, {"motif": "Confirmation du numéro",
 check("motif jamais écrasé", _mst["motif"] == "demande de prix routeur AX3000")
 check("category mise à jour", _mst["category"] == "service")
 
-if __name__ == "__main__":
-    print("\n%d failures" % len(failures))
-    sys.exit(1 if failures else 0)
-
+print("\n%d failures" % len(failures))
+sys.exit(1 if failures else 0)

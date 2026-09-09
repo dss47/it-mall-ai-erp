@@ -12,7 +12,7 @@ GROQ_URL = "https://api.groq.com/openai/v1/audio/transcriptions"
 GROQ_MODEL = "whisper-large-v3-turbo"
 
 GEMINI_URL = ("https://generativelanguage.googleapis.com/v1beta/models/"
-              "gemini-3.1-flash-lite:generateContent")
+              "gemini-3.5-flash-lite:generateContent")
 GEMINI_MAX_TOKENS = 400
 
 TTS_URL = "http://127.0.0.1:5000/synthesize"
@@ -24,15 +24,15 @@ LOG = "/var/log/asterisk/ai_agent.log"
 
 SAMPLE_RATE = 8000
 VAD_FRAME = 256               # 32 ms at 8 kHz
-SPEECH_PROB = 0.6             # Silero speech threshold (raised vs old 0.5)
-ENERGY_MIN = 200              # int16 RMS floor: anything quieter is silence
+SPEECH_PROB = 0.6             # Silero speech threshold
+ENERGY_MIN = 200              # int16 RMS floor
 MIN_UTTERANCE_S = 0.5
 SILENCE_HANGUP_S = 30.0
 MAX_SPEECH_TURNS = 30
 
 BARG_PROB = 0.55
 BARG_IN_FRAMES = 4            # 128 ms sustained speech cuts TTS (barge-in)
-POST_TTS_HOLD = 1.2           # silence après TTS avant de ré-écouter (raised for Alcatel DECT latency)
+POST_TTS_HOLD = 1.2           # silence après TTS avant de ré-écouter
 
 # Adaptive turn-taking: patience = silence needed to close a turn.
 EXPECTATIONS = {

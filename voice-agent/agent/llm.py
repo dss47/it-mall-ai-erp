@@ -180,7 +180,8 @@ def is_mistake_call(text):
     wrong_number_patterns = [
         "mauvais numéro", "mauvais numero", "mauvaise entreprise", "mauvaise société", "mauvaise societe",
         "ce n'est pas vous", "faux numéro", "faux numero", "pas le bon numéro", "pas le bon numero",
-        "trompé de numéro", "trompe de numero", "trompé d'entreprise", "erreur de numéro", "erreur de numero"
+        "trompé de numéro", "trompe de numero", "trompé d'entreprise", "erreur de numéro", "erreur de numero",
+        "erreur de ma part", "me suis trompé", "me suis trompe", "trompé d'endroit", "c'était une erreur", "c etait une erreur"
     ]
     return any(p in low for p in wrong_number_patterns)
 
@@ -277,3 +278,60 @@ def free(session, text):
 
     parsed["offer"] = offer
     return parsed
+
+
+def post_call_analyze(history, caller_name="Client"):
+    """Analyse complète et structurée de la transcription à la fin de l'appel pour Odoo & n8n."""
+    from . import db
+    catalog_summary = db.get_active_catalog_summary()
+    transcript_lines = []
+    for h in history:
+        role = "Client" if h.get("role") == "user" else "Assistant"
+        cnt = (h.get("content") or "").strip()
+        if cnt and not cnt.startswith("Contexte client :"):
+            transcript_lines.append(f"{role}: {cnt}")
+    transcript_text = "\n".join(transcript_lines)
+
+    prompt = (
+        "Tu es l'analyseur CRM & ERP expert de l'entreprise IT Mall.\n"
+        "Voici la transcription complète de l'appel téléphonique qui vient de s'achever :\n"
+        f"\"\"\"\n{transcript_text}\n\"\"\"\n\n"
+        f"CATALOGUE OFFICIEL ODOO EN TEMPS RÉEL :\n{catalog_summary}\n\n"
+        "TÂCHE :\n"
+        "1. Identifie l'intention principale (\"intent_type\") :\n"
+        "   - \"quote_request\" : UNIQUEMENT pour les commandes standard (quantités <= 20 unités par produit).\n"
+        "   - \"general_inquiry\" : pour les simples renseignements OU pour les COMMANDES EN GROS (> 20 unités, ex: 50, 100, 300 unités) car elles nécessitent l'intervention humaine d'un commercial (dans ce cas : items=[], needs_human=true, pas de devis automatique).\n"
+        "   - \"order_cancellation\" : si le client demande d'annuler ou modifier une commande.\n"
+        "   - \"support_urgent\" : en cas de panne critique ou coupure technique.\n"
+        "2. Dans \"items\", liste TOUS les articles demandés/commandés (seulement si intent_type == 'quote_request'). Si la quantité d'un article dépasse 20, items DOIT être une liste vide [].\n"
+        "3. Calcule \"estimated_total_revenue\" (somme des quantités * prix unitaire). 0 si annulation, commande en gros ou simple info.\n"
+        "4. Rédige un \"motif\" clair et ultra-synthétique (max 8 mots, ex: « Devis 2 switchs Cisco et 2 bornes WiFi »).\n\n"
+        "Réponds STRICTEMENT en JSON avec ce format :\n"
+        "{\n"
+        "  \"intent_type\": \"quote_request|order_cancellation|general_inquiry|support_urgent\",\n"
+        "  \"category\": \"produit|livraison|paiement|service|autre\",\n"
+        "  \"motif\": \"...\",\n"
+        "  \"items\": [\n"
+        "    {\n"
+        "      \"product_name\": \"Nom exact du produit\",\n"
+        "      \"quantity\": 1,\n"
+        "      \"unit_price\": 0,\n"
+        "      \"total_price\": 0\n"
+        "    }\n"
+        "  ],\n"
+        "  \"estimated_total_revenue\": 0,\n"
+        "  \"urgency\": \"normal|high\",\n"
+        "  \"needs_human\": false\n"
+        "}"
+    )
+
+    payload = {
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "maxOutputTokens": 600,
+            "responseMimeType": "application/json"
+        }
+    }
+    res = _call(payload)
+    return res if isinstance(res, dict) else {}
+

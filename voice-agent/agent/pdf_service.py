@@ -158,7 +158,7 @@ def send_pdf_to_whatsapp(order_id, phone, quote_ref="Devis", customer_name="Clie
             'to': clean_phone,
             'type': 'template',
             'template': {
-                'name': 'devis_itmall_fr',
+                'name': 'devis_client_itmall',
                 'language': {'code': 'fr'},
                 'components': [
                     {

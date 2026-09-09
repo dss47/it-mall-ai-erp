@@ -270,6 +270,10 @@ class CallSession:
         except Exception:
             pass
         try:
+            self.sock.shutdown(socket.SHUT_RDWR)
+        except Exception:
+            pass
+        try:
             self.sock.close()
         except Exception:
             pass
@@ -407,13 +411,18 @@ class CallSession:
                 if reply is not None:
                     self.play(reply, final=True)
         finally:
+            # Raccrocher immédiatement la ligne téléphonique côté Asterisk
+            self.alive = False
+            self.event.set()
+            self.end()
+            log("audiosocket socket closed for %s" % self.uuid)
+
             self._save_missing_demande()
             db.end_call(self.call_id, "completed" if self.closed_bye else "ended")
 
             st = self.registry.state
-            motif = (st.get("motif") or "").strip()
-            caller_name = st.get("name") or (
-                self.caller_partner.get("name") if self.caller_partner else None)
+            partner_name = self.caller_partner.get("name") if self.caller_partner else None
+            caller_name = partner_name or st.get("name")
             caller_phone = st.get("phone") or self.caller_phone or (
                 self.caller_partner.get("phone") if self.caller_partner else None)
             partner_id = self.caller_partner.get("id") if self.caller_partner else None
@@ -421,6 +430,34 @@ class CallSession:
                 p = db.lookup_client(caller_phone)
                 if p:
                     partner_id = p.get("id")
+
+            # Synthèse globale post-appel pour extraction multi-produits précise (en tâche de fond pour ne pas bloquer)
+            try:
+                post_summary = llm.post_call_analyze(self.history, caller_name=caller_name or "Client")
+                if post_summary and isinstance(post_summary, dict):
+                    if post_summary.get("intent_type"):
+                        st["intent_type"] = post_summary["intent_type"]
+                    if post_summary.get("category"):
+                        st["category"] = post_summary["category"]
+                    if post_summary.get("motif"):
+                        st["motif"] = post_summary["motif"]
+                    if post_summary.get("items") and isinstance(post_summary["items"], list):
+                        st["items"] = post_summary["items"]
+                    if post_summary.get("estimated_total_revenue") is not None:
+                        try:
+                            st["estimated_total_revenue"] = float(post_summary["estimated_total_revenue"])
+                        except Exception:
+                            pass
+                    if post_summary.get("urgency"):
+                        st["urgency"] = post_summary["urgency"]
+                    if post_summary.get("needs_human"):
+                        st["needs_human"] = True
+                    log("post_call_analyze completed: motif=%r intent=%r items=%d rev=%s" % (
+                        st.get("motif"), st.get("intent_type"), len(st.get("items", [])), st.get("estimated_total_revenue")))
+            except Exception as e:
+                log("post_call_analyze error: %r" % e)
+
+            motif = (st.get("motif") or "").strip()
             # Auto-detect call state for Odoo (urgent, to_call, done)
             is_urgent = False
             urgency = (st.get("urgency") or "").lower()
@@ -450,6 +487,7 @@ class CallSession:
             if any(kw in low_motif for kw in ("erreur", "tromp", "faux num", "mauvais num", "rien", "information", "renseignement", "vérification", "confirmation", "disponibilité")):
                 requires_followup = False
 
+            call_state = "done"
             if is_urgent:
                 call_state = "urgent"
             elif requires_followup:
@@ -487,35 +525,69 @@ class CallSession:
                 call_uuid=self.uuid,
             )
 
-            # Attach audio recording from Asterisk
+            # Attach audio recording from Session
             def _async_attach_audio(uuid, call_id):
-                import time, glob, os, psycopg2
-                for _ in range(20):
-                    time.sleep(0.7)
-                    mp3_list = glob.glob(f"/opt/voice-agent/recordings/*_{uuid[:8]}.mp3")
-                    if mp3_list:
-                        mp3_path = mp3_list[0]
-                        try:
-                            with open(mp3_path, "rb") as f:
-                                data = f.read()
-                            if len(data) > 100:
-                                con = db._odoo_conn()
-                                cur = con.cursor()
-                                cur.execute("UPDATE it_mall_call_log SET recording_filename = 'enregistrement.mp3' WHERE id = %s", (call_id,))
-                                cur.execute("DELETE FROM ir_attachment WHERE res_model = 'it_mall.call.log' AND res_id = %s AND res_field = 'recording_file'", (call_id,))
-                                cur.execute("""
-                                    INSERT INTO ir_attachment (name, res_model, res_id, res_field, type, db_datas, mimetype, file_size, public, create_date, write_date)
-                                    VALUES ('enregistrement.mp3', 'it_mall.call.log', %s, 'recording_file', 'binary', %s, 'audio/mpeg', %s, true, NOW(), NOW())
-                                """, (call_id, psycopg2.Binary(data), len(data)))
-                                con.commit()
-                                con.close()
-                                log("Attached audio %s (%d bytes) to call log #%d" % (mp3_path, len(data), call_id))
-                                break
-                        except Exception as e:
-                            log("Error attaching audio: %r" % e)
+                import time, glob, os, base64, subprocess, psycopg2
+                sess_dir = getattr(self, "sess_dir", f"/opt/voice-agent/sessions/{uuid}")
+                mp3_path = os.path.join(sess_dir, "conversation.mp3")
+                
+                # Check for existing recordings in /opt/voice-agent/recordings or merge session turns
+                recordings = glob.glob(f"/opt/voice-agent/recordings/*_{uuid[:8]}.mp3")
+                if recordings:
+                    mp3_path = recordings[0]
+                elif os.path.isdir(sess_dir):
+                    # Gather and sort all turn WAV files (caller speech AND AI agent replies)
+                    turns = glob.glob(os.path.join(sess_dir, "turn*.wav"))
+                    wav_files = []
+                    # Interleave turns and replies chronologically: turn1 -> reply1 -> turn2 -> reply2
+                    for i in range(1, len(turns) + 5):
+                        t_file = os.path.join(sess_dir, f"turn{i}.wav")
+                        r_file = os.path.join(sess_dir, f"reply{i}.wav")
+                        if os.path.exists(t_file) and os.path.getsize(t_file) > 44:
+                            wav_files.append(t_file)
+                        if os.path.exists(r_file) and os.path.getsize(r_file) > 44:
+                            wav_files.append(r_file)
 
+                    if wav_files:
+                        try:
+                            # Create concat list for ffmpeg
+                            list_file = os.path.join(sess_dir, "turns.txt")
+                            with open(list_file, "w") as lf:
+                                for wf in wav_files:
+                                    lf.write(f"file '{wf}'\n")
+                            subprocess.run([
+                                "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                                "-i", list_file, "-c:a", "libmp3lame", "-b:a", "64k", mp3_path
+                            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+                        except Exception as e:
+                            log("ffmpeg merge error: %r" % e)
+
+                if os.path.exists(mp3_path):
+                    try:
+                        with open(mp3_path, "rb") as f:
+                            data = f.read()
+                        if len(data) > 100:
+                            b64_data = base64.b64encode(data).decode('utf-8')
+                            con = db._odoo_conn()
+                            cur = con.cursor()
+                            cur.execute("UPDATE it_mall_call_log SET recording_filename = 'enregistrement.mp3' WHERE id = %s", (call_id,))
+                            cur.execute("DELETE FROM ir_attachment WHERE res_model = 'it_mall.call.log' AND res_id = %s AND res_field = 'recording_file'", (call_id,))
+                            cur.execute("""
+                                INSERT INTO ir_attachment (name, res_model, res_id, res_field, type, db_datas, mimetype, file_size, public, create_date, write_date)
+                                VALUES ('enregistrement.mp3', 'it_mall.call.log', %s, 'recording_file', 'binary', %s, 'audio/mpeg', %s, true, NOW(), NOW())
+                            """, (call_id, psycopg2.Binary(data), len(data)))
+                            con.commit()
+                            con.close()
+                            log("Attached audio %s (%d bytes) to call log #%d" % (mp3_path, len(data), call_id))
+                    except Exception as e:
+                        log("Error attaching audio: %r" % e)
+
+            # Attach audio recording directly and reliably before closing session
             if log_id:
-                threading.Thread(target=_async_attach_audio, args=(self.uuid, log_id), daemon=True).start()
+                try:
+                    _async_attach_audio(self.uuid, log_id)
+                except Exception as e:
+                    log("Error attaching audio: %r" % e)
 
             # Trigger n8n Webhook for post-call workflows (CRM leads, WhatsApp, alerts)
             import urllib.request

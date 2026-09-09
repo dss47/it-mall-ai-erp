@@ -8,12 +8,10 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
-import os
-
-AMI_HOST = os.environ.get("AMI_HOST", "127.0.0.1")
-AMI_PORT = int(os.environ.get("AMI_PORT", 5038))
-AMI_USER = os.environ.get("AMI_USER", "odoo_ami")
-AMI_SECRET = os.environ.get("AMI_SECRET", "odoo_ami_secret")
+AMI_HOST = "127.0.0.1"
+AMI_PORT = 5038
+AMI_USER = "ea871ad996ef217939ee7a75af43f2bf"
+AMI_SECRET = "6659f8e832e5aaa45cd0731048c5133e"
 
 
 def _send_ami_action(action_dict):

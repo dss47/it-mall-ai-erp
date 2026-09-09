@@ -48,13 +48,8 @@ try:
     with open(mp3_path, 'rb') as f:
         data = f.read()
 
-    conn = psycopg2.connect(
-        dbname=os.environ.get('ODOO_DB', 'it_mall_db'),
-        user=os.environ.get('ODOO_USER', 'odoo'),
-        password=os.environ.get('ODOO_PASS', 'odoo'),
-        host=os.environ.get('ODOO_HOST', 'localhost'),
-        port=int(os.environ.get('ODOO_PORT', 5432))
-    )
+    conn = psycopg2.connect(dbname='it_mall_db', user='odoo', password='odoo',
+                            host='localhost', port=5432)
     cur = conn.cursor()
 
     # Find the call log record

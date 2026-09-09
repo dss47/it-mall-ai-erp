@@ -13,18 +13,19 @@ def _capture_meta(state, reply, fallback_text=None):
     """Récolte nom, motif + analyse produits par le LLM pour les sauver en base."""
     analysis = reply.get("analysis") or {}
     motif = (reply.get("motif") or "").strip()
-    if motif and not state.get("motif"):
+    if motif:
         state["motif"] = llm._clean_motif(motif)[:300]
     elif fallback_text and not state.get("motif"):
         cleaned = llm._clean_motif(fallback_text)
         if cleaned:
             state["motif"] = cleaned[:200]
 
-    # Capture caller name naturally if given
+    # Capture caller name naturally if given (only if not already set by CRM partner)
     c_name = analysis.get("caller_name")
     if c_name and isinstance(c_name, str) and len(c_name.strip()) > 2 and c_name.lower() not in ("null", "none", "inconnu", "client"):
-        state["name"] = c_name.strip()
-        state["done"] = True
+        if not state.get("name") or len(c_name.strip()) > len(state.get("name", "")):
+            state["name"] = c_name.strip()
+            state["done"] = True
     elif fallback_text and not state.get("name"):
         from .extract import extract_name
         nm = extract_name(fallback_text)
