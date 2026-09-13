@@ -284,7 +284,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Bearer EAAUCltnmWIMBSeLOheOM5ogOPhjqjwrHTt0z5MUSfP1hXPdB8ycMqhecIajJkaSQ3AomBVoWmfKy2Nb7klgjEQJAQJZCRnFuH2b1ekEbe1tE5FORzFV1ZBo4EMQVafBhTlriCZBhHAyDoQt6GSCZAnZBKo6Ht9TEZB76xf1dcc97izdbKim82Him3MfZArpEZALZA1gZDZD"
+              "value": "Bearer {{ $env.WHATSAPP_TOKEN || 'YOUR_WHATSAPP_CLOUD_API_TOKEN' }}"
             },
             {
               "name": "Content-Type",
